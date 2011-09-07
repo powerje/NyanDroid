@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer name="rainbow_movement_time">175</integer>
+	<integer name="android_movement_time">100</integer>
+</resources>
