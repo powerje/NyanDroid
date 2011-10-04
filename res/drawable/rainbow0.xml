@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
-	id="rainbow_anim0" oneshot="false">
-	<item android:drawable="@drawable/rainbow_frame0" android:duration="@integer/rainbow_movement_time" />
-	<item android:drawable="@drawable/rainbow_frame1" android:duration="@integer/rainbow_movement_time" />
-</animation-list>
