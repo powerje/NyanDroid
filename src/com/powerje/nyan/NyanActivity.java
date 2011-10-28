@@ -28,7 +28,7 @@ public class NyanActivity extends Activity {
 		mRoot = new NyanView(this, largest);
 		setContentView(mRoot);
 		super.onStart();
-		mPlayer = MediaPlayer.create(this, R.raw.dyan);
+		mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
 		mPlayer.setLooping(true);
 		mPlayer.setScreenOnWhilePlaying(true);
 

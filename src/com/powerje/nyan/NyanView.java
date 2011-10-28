@@ -1,6 +1,8 @@
 package com.powerje.nyan;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
@@ -15,13 +17,20 @@ import com.powerje.nyan.sprites.Stars;
  * @author powerj
  *
  */
-public class NyanView extends SurfaceView implements SurfaceHolder.Callback {
+public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnSharedPreferenceChangeListener {
 
 	/** Paint to draw with. */
 	private final Paint mPaint = new Paint();
 	/** True iff dimensions have been setup. */
 	private boolean hasSetup;
 
+	private SharedPreferences mPrefs;
+	private boolean mPreferencesChanged;
+	private String mDroidImage;
+	private String mRainbowImage;
+	private String mStarImage;
+	private int mMaxDim;
+	
 	/** Animated NyanDroid. */
 	private NyanDroid mNyanDroid;
 	/** Animated rainbow. */
@@ -44,26 +53,45 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	private void init(int scaleBy) {
+		mPrefs = mContext.getSharedPreferences(NyanPaper.SHARED_PREFS_NAME, 0);
+		mPrefs.registerOnSharedPreferenceChangeListener(this);
+		onSharedPreferenceChanged(mPrefs, null);
+		setupPrefs();
+		
 		getHolder().addCallback(this);
 
 		hasSetup = false;
-		int maxDim = scaleBy / 10;
-		Context c = mContext;
+		mMaxDim = scaleBy / 10;
+		setupAnimations();
+	}
 
+	private void setupAnimations() {
 		// initialize Neandroid
-		mNyanDroid = new NyanDroid(c, maxDim, mPaint, "nyanwich");
+		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
 		// initialize Rainbow
-		maxDim = (int) (mNyanDroid.getFrameHeight() * .4);
-		mRainbow = new Rainbow(c, maxDim, mPaint, "neapolitan");
+		mMaxDim = (int) (mNyanDroid.getFrameHeight() * .4);
+		mRainbow = new Rainbow(mContext, mMaxDim, mPaint, mRainbowImage);
 
 		// remember offset for when drawing rainbows
 		mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
 				- mRainbow.getFrameWidth());
 
-		mStars = new Stars(c, maxDim, mPaint, "white");
+		mStars = new Stars(mContext, mMaxDim, mPaint, mStarImage);
 	}
 
+	public void onSharedPreferenceChanged(SharedPreferences prefs,
+			String key) {
+		setupPrefs();
+		mPreferencesChanged = true;
+	}
+
+	private void setupPrefs() {
+		mDroidImage = mPrefs.getString("droid_image", "nyanwich");
+		mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
+		mStarImage = mPrefs.getString("star_image", "white");
+	}
+	
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mThread = new DrawingThread(getHolder(), this);
@@ -94,6 +122,14 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback {
 	public void onDraw(Canvas c) {
 		frameCount++;
 		if (c != null) {
+			
+			if (mPreferencesChanged) {
+				setupAnimations();
+				mPreferencesChanged = false;
+				//must reset centers
+				hasSetup = false;
+			}
+			
 			if (!hasSetup) {
 				mRainbow.setCenter(c.getWidth() / 2, c.getHeight() / 2);
 				mNyanDroid.setCenter(c.getWidth() / 2, c.getHeight() / 2);

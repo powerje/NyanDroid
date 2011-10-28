@@ -2,14 +2,13 @@ package com.powerje.nyan.sprites;
 
 import java.util.ArrayList;
 
-import com.powerje.nyan.NyanUtils;
-import com.powerje.nyan.R;
-import com.powerje.nyan.R.drawable;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import com.powerje.nyan.NyanUtils;
+import com.powerje.nyan.R;
 
 public class Rainbow {
 	final Context mContext;
