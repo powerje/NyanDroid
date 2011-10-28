@@ -1,6 +1,10 @@
-package com.powerje.nyan;
+package com.powerje.nyan.sprites;
 
 import java.util.ArrayList;
+
+import com.powerje.nyan.NyanUtils;
+import com.powerje.nyan.R;
+import com.powerje.nyan.R.drawable;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -43,35 +47,50 @@ public class NyanDroid {
 	 * @param paint
 	 *            used to draw.
 	 */
-	NyanDroid(Context c, int maxDim, Paint paint) {
+	public NyanDroid(Context c, int maxDim, Paint paint, String image) {
 		mContext = c;
 		mPaint = paint;
-
+		Bitmap repeatingFrame;
+		
 		mFrames = new ArrayList<Bitmap>();
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame1,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame2,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame3,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.superman0,
-				maxDim));
+		if (image.equals("droidtv")) {
+			repeatingFrame = NyanUtils.imageResourceToBitmap(c, R.drawable.superman_gtv0,
+					maxDim);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
+			repeatingFrame = NyanUtils.imageResourceToBitmap(c, R.drawable.superman_gtv1,
+					maxDim);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
+		} else {
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame1,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame2,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame3,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.superman0, maxDim));
 
-		Bitmap repeatingFrame = NyanUtils.imageResourceToBitmap(c, R.drawable.superman1, maxDim);
-		mFrames.add(repeatingFrame);
-		mFrames.add(repeatingFrame);
-		mFrames.add(repeatingFrame);
+			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+					R.drawable.superman1, maxDim);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
+			mFrames.add(repeatingFrame);
 
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame4,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame5,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame6,
-				maxDim));
-		mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
-				maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame4,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame5,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame6,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
+					maxDim));
+		} 
 	}
 
 	/**

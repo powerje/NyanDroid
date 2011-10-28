@@ -1,13 +1,20 @@
 package com.powerje.nyan;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
+import com.powerje.nyan.sprites.NyanDroid;
+import com.powerje.nyan.sprites.Rainbow;
+import com.powerje.nyan.sprites.Stars;
+
 public class NyanPaper extends WallpaperService {
+
+	public static final String SHARED_PREFS_NAME = "nyandroidsettings";
 
 	private final Handler mDroidHandler = new Handler();
 
@@ -26,16 +33,25 @@ public class NyanPaper extends WallpaperService {
 		return new NyanEngine();
 	}
 
-	class NyanEngine extends Engine {
+	class NyanEngine extends Engine implements
+			SharedPreferences.OnSharedPreferenceChangeListener {
 		private final Paint mPaint = new Paint();
 
 		private boolean mVisible;
-		private boolean hasSetup = false;
+		private boolean hasSetup;
+		private SharedPreferences mPrefs;
+		private boolean mPreferencesChanged;
 
 		private NyanDroid mNyanDroid;
 		private Rainbow mRainbow;
 		private Stars mStars;
+		
+		private String mDroidImage;
+		private String mRainbowImage;
+		private String mStarImage;
 
+		private int mMaxDim;
+		
 		private final Runnable mDrawFrame = new Runnable() {
 			public void run() {
 				drawFrame();
@@ -44,13 +60,31 @@ public class NyanPaper extends WallpaperService {
 
 		NyanEngine() {
 			mPaint.setColor(0xffffffff);
+
+			mPrefs = NyanPaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
+			mPrefs.registerOnSharedPreferenceChangeListener(this);
+			onSharedPreferenceChanged(mPrefs, null);
+			setupPrefs();
 		}
 
+		public void onSharedPreferenceChanged(SharedPreferences prefs,
+				String key) {
+			setupPrefs();
+			mPreferencesChanged = true;
+		}
+
+		private void setupPrefs() {
+			mDroidImage = mPrefs.getString("droid_image", "nyanwich");
+			mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
+			mStarImage = mPrefs.getString("star_image", "white");
+		}
+		
 		@Override
 		public void onDestroy() {
 			super.onDestroy();
 			mDroidHandler.removeCallbacks(mDrawFrame);
 		}
+		
 
 		@Override
 		public void onVisibilityChanged(boolean visible) {
@@ -73,22 +107,26 @@ public class NyanPaper extends WallpaperService {
 			super.onSurfaceChanged(holder, format, width, height);
 
 			hasSetup = false;
-			int maxDim = width / 10;
-			Context c = getApplicationContext();
+			mMaxDim = width / 10;
+			
+			setupAnimations();
+		}
 
-			mNyanDroid = new NyanDroid(c, maxDim, mPaint);
+		private void setupAnimations() {
+			Context c = getApplicationContext();
+			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
 			// initialize Rainbow
-			maxDim = (int) (mNyanDroid.getFrameHeight() * .4);
-			mRainbow = new Rainbow(c, maxDim, mPaint);
+			mMaxDim = (int) (mNyanDroid.getFrameHeight() * .4);
+			mRainbow = new Rainbow(c, mMaxDim, mPaint, mRainbowImage);
 
 			// remember offset for when drawing rainbows
 			mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
 					- mRainbow.getFrameWidth());
 
-			mStars = new Stars(c, maxDim, mPaint);
+			mStars = new Stars(c, mMaxDim, mPaint, mStarImage);
 		}
-
+		
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
@@ -104,6 +142,13 @@ public class NyanPaper extends WallpaperService {
 		void drawFrame() {
 			final SurfaceHolder holder = getSurfaceHolder();
 
+			if (mPreferencesChanged) {
+				setupAnimations();
+				mPreferencesChanged = false;
+				//must reset centers
+				hasSetup = false;
+			}
+			
 			Canvas c = null;
 			try {
 				c = holder.lockCanvas();

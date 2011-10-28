@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="@string/nyan_settings_title"
+	android:key="nyan_settings">
+
+	<ListPreference
+		android:key="droid_image"
+		android:title="@string/nyan_image_title"
+		android:summary="@string/nyan_image_summary"
+		android:entries="@array/nyan_shapenames"
+		android:entryValues="@array/nyan_shapeprefix" />
+
+	<ListPreference
+		android:key="rainbow_image"
+		android:title="@string/rainbow_image_title"
+		android:summary="@string/rainbow_image_summary"
+		android:entries="@array/rainbow_shapenames"
+		android:entryValues="@array/rainbow_shapeprefixes" />
+
+	<ListPreference
+		android:key="star_image"
+		android:title="@string/star_image_title"
+		android:summary="@string/star_image_summary"
+		android:entries="@array/star_shapenames"
+		android:entryValues="@array/star_shapeprefixes" />
+
+</PreferenceScreen>

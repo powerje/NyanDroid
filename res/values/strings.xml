@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Nyan</string>
-    <string name="wallpaper_description">Nyandroid, bringing Ice Cream Sandwiches to all!</string>
+	<string
+		name="app_name">Nyan</string>
+	<string
+		name="wallpaper_description">Nyandroid, bringing Ice Cream Sandwiches to all!</string>
+	<string
+		name="nyan_settings_title">Ice Cream Nyanwich Settings</string>
+	<string
+		name="nyan_image_title">Droid</string>
+	<string
+		name="nyan_image_summary">Select a galactic traveler</string>
+	<string
+		name="rainbow_image_title">Rainbow</string>
+	<string
+		name="rainbow_image_summary">Select burnoff</string>
+
+	<string
+		name="star_image_title">Star</string>
+	<string
+		name="star_image_summary">Select star type</string>
 </resources>

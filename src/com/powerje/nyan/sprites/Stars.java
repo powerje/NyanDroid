@@ -1,4 +1,4 @@
-package com.powerje.nyan;
+package com.powerje.nyan.sprites;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-class Stars {
+import com.powerje.nyan.NyanUtils;
+import com.powerje.nyan.R;
+
+public class Stars {
 	
 	final ArrayList<Bitmap> mLargeStars;
 	final ArrayList<Bitmap> mMediumStars;
@@ -24,11 +27,17 @@ class Stars {
 
 	final private static int MAX_NEW_STARS = 5;
 
-	final int[] drawables = { R.drawable.star0, R.drawable.star1,
+	final int[] whiteDrawables = { R.drawable.star0, R.drawable.star1,
 			R.drawable.star2, R.drawable.star3, R.drawable.star4,
 			R.drawable.star5, R.drawable.star6, R.drawable.star7,
 			R.drawable.star8, R.drawable.star9 };
-	final int mNumberOfFrames = drawables.length;
+	
+	final int[] yellowDrawables = { R.drawable.yellow_star0, R.drawable.yellow_star1,
+			R.drawable.yellow_star2, R.drawable.yellow_star3, R.drawable.yellow_star4,
+			R.drawable.yellow_star5, R.drawable.yellow_star6, R.drawable.yellow_star7,
+			R.drawable.yellow_star8, R.drawable.yellow_star9 };
+	
+	final int mNumberOfFrames = whiteDrawables.length;
 
 	boolean mMovingUp;
 
@@ -41,11 +50,18 @@ class Stars {
 		ArrayList<Bitmap> stars;
 	}
 
-	Stars(Context c, int maxDim, Paint paint) {
+	public Stars(Context c, int maxDim, Paint paint, String image) {
 
 		mContext = c;
 		mPaint = paint;
-
+		int[] drawables;
+		
+		if (image.equals("white")) {
+			drawables = whiteDrawables;
+		} else {
+			drawables = yellowDrawables;
+		}
+		
 		mLargeStars = new ArrayList<Bitmap>();
 		for (int i = 0; i < drawables.length; i++) {
 			mLargeStars.add(NyanUtils.scaleWithRatio(c, drawables[i],

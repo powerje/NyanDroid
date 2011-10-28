@@ -1,6 +1,10 @@
-package com.powerje.nyan;
+package com.powerje.nyan.sprites;
 
 import java.util.ArrayList;
+
+import com.powerje.nyan.NyanUtils;
+import com.powerje.nyan.R;
+import com.powerje.nyan.R.drawable;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,18 +22,24 @@ public class Rainbow {
 
 	private int currentFrame;
 	final private Paint mPaint;
-	
-	Rainbow(final Context c, final int maxDim, final Paint paint) {
+
+	public Rainbow(final Context c, final int maxDim, final Paint paint, String image) {
 		mContext = c;
 
 		mPaint = paint;
 
 		mFrames = new ArrayList<Bitmap>();
-		mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
-				R.drawable.neapolitan_rainbow_frame0, maxDim));
-		mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
-				R.drawable.neapolitan_rainbow_frame1, maxDim));
-
+		if (image.equals("neapolitan")) {
+			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+					R.drawable.neapolitan_rainbow_frame0, maxDim));
+			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+					R.drawable.neapolitan_rainbow_frame1, maxDim));
+		} else {
+			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+					R.drawable.rainbow_frame0, maxDim));
+			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+					R.drawable.rainbow_frame1, maxDim));
+		}
 		rainbowWidth = mFrames.get(0).getWidth();
 	}
 

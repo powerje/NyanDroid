@@ -6,6 +6,10 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.powerje.nyan.sprites.NyanDroid;
+import com.powerje.nyan.sprites.Rainbow;
+import com.powerje.nyan.sprites.Stars;
+
 /**
  * NyanView draws NyanDroid flying through space distributing Ice Cream Nyanwich.
  * @author powerj
@@ -47,17 +51,17 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback {
 		Context c = mContext;
 
 		// initialize Neandroid
-		mNyanDroid = new NyanDroid(c, maxDim, mPaint);
+		mNyanDroid = new NyanDroid(c, maxDim, mPaint, "nyanwich");
 
 		// initialize Rainbow
 		maxDim = (int) (mNyanDroid.getFrameHeight() * .4);
-		mRainbow = new Rainbow(c, maxDim, mPaint);
+		mRainbow = new Rainbow(c, maxDim, mPaint, "neapolitan");
 
 		// remember offset for when drawing rainbows
 		mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
 				- mRainbow.getFrameWidth());
 
-		mStars = new Stars(c, maxDim, mPaint);
+		mStars = new Stars(c, maxDim, mPaint, "white");
 	}
 
 	@Override

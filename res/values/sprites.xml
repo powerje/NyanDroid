@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources
+	xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+	<string-array
+		name="nyan_shapenames">
+		<item>"Nyanwich"</item>
+		<item>"DroidTV"</item>
+	</string-array>
+
+	<string-array
+		name="nyan_shapeprefix">
+		<item>"nyanwich"</item>
+		<item>"droidtv"</item>
+	</string-array>
+
+	<string-array
+		name="rainbow_shapenames">
+		<item>"Neapolitan"</item>
+		<item>"Rainbow"</item>
+	</string-array>
+
+	<string-array
+		name="rainbow_shapeprefixes">
+		<item>"neapolitan"</item>
+		<item>"rainbow"</item>
+	</string-array>
+
+	<string-array
+		name="star_shapenames">
+		<item>"White"</item>
+		<item>"Yellow"</item>
+	</string-array>
+	
+	<string-array
+		name="star_shapeprefixes">
+		<item>"white"</item>
+		<item>"yellow"</item>
+	</string-array>
+
+</resources>
