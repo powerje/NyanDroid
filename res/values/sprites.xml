@@ -7,12 +7,14 @@
 		name="nyan_shapenames">
 		<item>"Nyanwich"</item>
 		<item>"DroidTV"</item>
+		<item>"Nyanflop"</item>
 	</string-array>
 
 	<string-array
 		name="nyan_shapeprefix">
 		<item>"nyanwich"</item>
 		<item>"droidtv"</item>
+		<item>"ics_egg"</item>
 	</string-array>
 
 	<string-array

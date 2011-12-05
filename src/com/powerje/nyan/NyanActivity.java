@@ -34,7 +34,7 @@ public class NyanActivity extends Activity {
 		setContentView(mRoot);
 	}
 
-	@Override
+
 	public void onResume() {
 		super.onResume();
 		mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
@@ -49,7 +49,6 @@ public class NyanActivity extends Activity {
 			e.printStackTrace();
 		}
 		mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-			@Override
 			public void onPrepared(MediaPlayer mp) {
 				mPlayer.start();
 			}

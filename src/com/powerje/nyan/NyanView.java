@@ -92,14 +92,12 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		mStarImage = mPrefs.getString("star_image", "white");
 	}
 	
-	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mThread = new DrawingThread(getHolder(), this);
 		mThread.setRunning(true);
 		mThread.start();
 	}
 
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 	}

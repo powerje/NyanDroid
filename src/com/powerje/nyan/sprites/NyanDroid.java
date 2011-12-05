@@ -63,6 +63,31 @@ public class NyanDroid {
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
+		} else if (image.equals("ics_egg")) {
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid00,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid01,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid02,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid03,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid04,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid05,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid06,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid07,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid08,
+					maxDim));			
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid09,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid10,
+					maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid11,
+					maxDim));
 		} else {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
 					maxDim));
