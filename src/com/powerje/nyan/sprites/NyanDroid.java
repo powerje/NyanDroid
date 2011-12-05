@@ -64,6 +64,8 @@ public class NyanDroid {
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 		} else if (image.equals("ics_egg")) {
+			// hack because image sizes are different
+			maxDim += 25;
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid00,
 					maxDim));			
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid01,
@@ -87,6 +89,9 @@ public class NyanDroid {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid10,
 					maxDim));
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid11,
+					maxDim));
+		} else if (image.equals("tardis")) {
+			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.tardis,
 					maxDim));
 		} else {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
