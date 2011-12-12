@@ -36,6 +36,8 @@ public class NyanDroid {
 	/** Current frame NyanDroid is in. */
 	private int currentFrame;
 
+	private String mDroid;
+
 	/**
 	 * Construct NyanDroid.
 	 * 
@@ -49,47 +51,48 @@ public class NyanDroid {
 	public NyanDroid(Context c, int maxDim, Paint paint, String image) {
 		mContext = c;
 		mPaint = paint;
+		mDroid = image;
 		Bitmap repeatingFrame;
-		
+
 		mFrames = new ArrayList<Bitmap>();
 		if (image.equals("droidtv")) {
-			repeatingFrame = NyanUtils.imageResourceToBitmap(c, R.drawable.superman_gtv0,
-					maxDim);
+			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+					R.drawable.superman_gtv0, maxDim);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
-			repeatingFrame = NyanUtils.imageResourceToBitmap(c, R.drawable.superman_gtv1,
-					maxDim);
+			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+					R.drawable.superman_gtv1, maxDim);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 		} else if (image.equals("ics_egg")) {
 			// hack because image sizes are different
-			maxDim += 25;
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid00,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid01,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid02,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid03,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid04,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid05,
-					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid06,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid07,
-					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid08,
-					maxDim));			
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid09,
-					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid10,
-					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.nyandroid11,
-					maxDim));
+			maxDim += 20;
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid00, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid01, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid02, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid03, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid04, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid05, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid06, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid07, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid08, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid09, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid10, maxDim));
+			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+					R.drawable.nyandroid11, maxDim));
 		} else if (image.equals("tardis")) {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.tardis,
 					maxDim));
@@ -119,7 +122,7 @@ public class NyanDroid {
 					maxDim));
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
 					maxDim));
-		} 
+		}
 	}
 
 	/**
@@ -138,14 +141,16 @@ public class NyanDroid {
 			currentFrame = (currentFrame == mFrames.size() - 1) ? 0
 					: (currentFrame + 1);
 
-			if (mMovingUp) {
-				yOffset += 6;
-				if (yOffset > 5)
-					mMovingUp = false;
-			} else {
-				yOffset -= 6;
-				if (yOffset < -5)
-					mMovingUp = true;
+			if (!mDroid.equals("ics_egg")) {
+				if (mMovingUp) {
+					yOffset += 6;
+					if (yOffset > 5)
+						mMovingUp = false;
+				} else {
+					yOffset -= 6;
+					if (yOffset < -5)
+						mMovingUp = true;
+				}
 			}
 		}
 	}
