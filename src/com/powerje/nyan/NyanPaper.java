@@ -17,9 +17,16 @@ public class NyanPaper extends WallpaperService {
 	public static final String SHARED_PREFS_NAME = "nyandroidsettings";
 
 	private final Handler mDroidHandler = new Handler();
-
+	private int mRefresh;
+	
 	@Override
 	public void onCreate() {
+		if (this.getPackageManager().hasSystemFeature("com.google.android.tv")) {
+			mRefresh = 50;
+		} else {
+			mRefresh = 30;
+		}
+		
 		super.onCreate();
 	}
 
@@ -51,6 +58,7 @@ public class NyanPaper extends WallpaperService {
 		private String mStarImage;
 
 		private int mMaxDim;
+		
 		
 		private final Runnable mDrawFrame = new Runnable() {
 			public void run() {
@@ -184,7 +192,7 @@ public class NyanPaper extends WallpaperService {
 			mDroidHandler.removeCallbacks(mDrawFrame);
 			if (mVisible) {
 				// approx 30 fps
-				mDroidHandler.postDelayed(mDrawFrame, 1000 / 30);
+				mDroidHandler.postDelayed(mDrawFrame, 1000 / mRefresh);
 			}
 		}
 	}
