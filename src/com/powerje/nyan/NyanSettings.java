@@ -1,6 +1,7 @@
 package com.powerje.nyan;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
@@ -16,6 +17,8 @@ public class NyanSettings extends PreferenceActivity implements
         addPreferencesFromResource(R.xml.nyan_settings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(
                 this);
+        getListView().setBackgroundColor(Color.TRANSPARENT);
+        getListView().setCacheColorHint(Color.TRANSPARENT);
     }
 
     @Override

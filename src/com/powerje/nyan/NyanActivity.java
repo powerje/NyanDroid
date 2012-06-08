@@ -37,7 +37,7 @@ public class NyanActivity extends Activity {
 
 	public void onResume() {
 		super.onResume();
-		mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
+		//mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
 		mPlayer.setLooping(true);
 		mPlayer.setScreenOnWhilePlaying(true);
 

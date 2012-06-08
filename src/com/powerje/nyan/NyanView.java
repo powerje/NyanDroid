@@ -61,7 +61,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		getHolder().addCallback(this);
 
 		hasSetup = false;
-		mMaxDim = scaleBy / 10;
+		mMaxDim = scaleBy / 20;
 		setupAnimations();
 	}
 

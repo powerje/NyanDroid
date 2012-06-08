@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.powerje.nyan.sprites.NyanDroid;
@@ -15,8 +16,9 @@ import com.powerje.nyan.sprites.Stars;
 public class NyanPaper extends WallpaperService {
 
 	public static final String SHARED_PREFS_NAME = "nyandroidsettings";
-
+	private static final String TAG = "NyanPaper";
 	private final Handler mDroidHandler = new Handler();
+	private static int mWidth;
 	
 	@Override
 	public Engine onCreateEngine() {
@@ -39,9 +41,10 @@ public class NyanPaper extends WallpaperService {
 		private String mDroidImage;
 		private String mRainbowImage;
 		private String mStarImage;
-
-		private int mMaxDim;
 		
+		private int mSizeMod;
+		private int mMaxDim;
+		private int mAnimationSpeed;
 		
 		private final Runnable mDrawFrame = new Runnable() {
 			public void run() {
@@ -60,6 +63,7 @@ public class NyanPaper extends WallpaperService {
 
 		public void onSharedPreferenceChanged(SharedPreferences prefs,
 				String key) {
+			Log.d(TAG, "prefs changed");
 			setupPrefs();
 			mPreferencesChanged = true;
 		}
@@ -68,6 +72,8 @@ public class NyanPaper extends WallpaperService {
 			mDroidImage = mPrefs.getString("droid_image", "nyanwich");
 			mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
 			mStarImage = mPrefs.getString("star_image", "white");
+			mSizeMod = mPrefs.getInt("size_mod", 10);
+			mAnimationSpeed = mPrefs.getInt("animation_speed", 3); 
 		}
 		
 		@Override
@@ -96,15 +102,15 @@ public class NyanPaper extends WallpaperService {
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
-
+			mWidth = width;
 			hasSetup = false;
-			mMaxDim = width / 10;
-			
 			setupAnimations();
 		}
 
 		private void setupAnimations() {
 			Context c = getApplicationContext();
+			mMaxDim = mWidth /((70 - (mSizeMod * 20)) + 1);
+			Log.d(TAG, "mMaxDim: " + mMaxDim);
 			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
 			// initialize Rainbow
@@ -121,6 +127,7 @@ public class NyanPaper extends WallpaperService {
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
+			Log.d(TAG, "onSurfaceDestroyed");
 			mVisible = false;
 			mDroidHandler.removeCallbacks(mDrawFrame);
 		}
@@ -175,7 +182,7 @@ public class NyanPaper extends WallpaperService {
 			mDroidHandler.removeCallbacks(mDrawFrame);
 			if (mVisible) {
 				// approx 30 fps
-				mDroidHandler.postDelayed(mDrawFrame, 1000 / 30);
+				mDroidHandler.postDelayed(mDrawFrame, 1000 / (mAnimationSpeed * 10));
 			}
 		}
 	}
