@@ -34,3 +34,8 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
+gen
+out
+.idea
+*.swp
+*.iml
