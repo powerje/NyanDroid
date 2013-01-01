@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 import java.io.IOException;
 
@@ -18,6 +19,11 @@ public class NyanActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+            getActionBar().setBackgroundDrawable(null);
+        }
 	}
 
 	@Override
