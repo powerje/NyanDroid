@@ -75,7 +75,7 @@ public class NyanPaper extends WallpaperService {
 			mDroidImage = mPrefs.getString("droid_image", "nyanwich");
 			mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
 			mStarImage = mPrefs.getString("star_image", "white");
-			mSizeMod = mPrefs.getInt("size_mod", 10);
+			mSizeMod = mPrefs.getInt("size_mod", 2);
 			mAnimationSpeed = mPrefs.getInt("animation_speed", 3); 
 		}
 		
