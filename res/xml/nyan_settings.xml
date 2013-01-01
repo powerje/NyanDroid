@@ -46,9 +46,4 @@
             robobunny:unitsLeft=""
             robobunny:unitsRight="" />
     </PreferenceCategory>
-    <CheckBoxPreference
-            android:key="original_easter_egg"
-            android:title="Use ICS Easter egg style"
-            android:defaultValue="false"
-            />
 </PreferenceScreen>

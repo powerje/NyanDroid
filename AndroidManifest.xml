@@ -30,8 +30,8 @@
                 android:resource="@xml/wallpaper" />
         </service>
 
-
-             <activity
+        <!--
+        <activity
             android:label="@string/app_name"
             android:name=".NyanActivity"
             android:theme="@android:style/Theme.Holo" >
@@ -41,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        !-->
 
         <activity
             android:name=".NyanSettings"

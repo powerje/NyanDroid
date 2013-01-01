@@ -1,14 +1,13 @@
 package com.powerje.nyan.sprites;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import com.powerje.nyan.NyanUtils;
 import com.powerje.nyan.R;
+
+import java.util.ArrayList;
 
 /**
  * NyanDroid is a class for drawing an animated nyan droid.
@@ -55,6 +54,7 @@ public class NyanDroid {
 		Bitmap repeatingFrame;
 
 		mFrames = new ArrayList<Bitmap>();
+
 		if (image.equals("droidtv")) {
 			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
 					R.drawable.superman_gtv0, maxDim);
@@ -143,12 +143,12 @@ public class NyanDroid {
 
 			if (!mDroid.equals("ics_egg")) {
 				if (mMovingUp) {
-					yOffset += 6;
-					if (yOffset > 5)
+					yOffset += 3;
+					if (yOffset > 2)
 						mMovingUp = false;
 				} else {
-					yOffset -= 6;
-					if (yOffset < -5)
+					yOffset -= 3;
+					if (yOffset < -2)
 						mMovingUp = true;
 				}
 			}
