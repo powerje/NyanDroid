@@ -26,6 +26,7 @@ public class NyanUtils {
 		}
 		// scale and read the data
 		opts.inJustDecodeBounds = false;
+        opts.inPurgeable = true;
 		opts.inSampleSize = s;
 		bmp = BitmapFactory.decodeResource(c.getResources(), res, opts);
 		return bmp;

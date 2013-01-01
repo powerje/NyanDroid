@@ -1,7 +1,5 @@
 package com.powerje.nyan;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -10,6 +8,8 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import java.io.IOException;
 
 public class NyanActivity extends Activity {
 	private NyanView mRoot = null;
@@ -34,10 +34,9 @@ public class NyanActivity extends Activity {
 		setContentView(mRoot);
 	}
 
-
 	public void onResume() {
 		super.onResume();
-		//mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
+		mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
 		mPlayer.setLooping(true);
 		mPlayer.setScreenOnWhilePlaying(true);
 

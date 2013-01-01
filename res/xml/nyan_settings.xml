@@ -39,11 +39,16 @@
         <com.robobunny.SeekBarPreference
             android:defaultValue="2"
             android:key="size_mod"
-            android:max="3"
+            android:max="4"
             android:summary="Adjust image size"
             android:title="Image size"
             robobunny:min="1"
             robobunny:unitsLeft=""
             robobunny:unitsRight="" />
     </PreferenceCategory>
+    <CheckBoxPreference
+            android:key="original_easter_egg"
+            android:title="Use ICS Easter egg style"
+            android:defaultValue="false"
+            />
 </PreferenceScreen>

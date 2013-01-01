@@ -41,11 +41,14 @@ public class NyanPaper extends WallpaperService {
 		private String mDroidImage;
 		private String mRainbowImage;
 		private String mStarImage;
-		
+
+        private int mAnimationSpeed;
 		private int mSizeMod;
 		private int mMaxDim;
-		private int mAnimationSpeed;
-		
+
+
+        private int frameCount;
+
 		private final Runnable mDrawFrame = new Runnable() {
 			public void run() {
 				drawFrame();
@@ -109,7 +112,7 @@ public class NyanPaper extends WallpaperService {
 
 		private void setupAnimations() {
 			Context c = getApplicationContext();
-			mMaxDim = mWidth /((70 - (mSizeMod * 20)) + 1);
+			mMaxDim = (int) Math.pow(2, mSizeMod + 2);
 			Log.d(TAG, "mMaxDim: " + mMaxDim);
 			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
@@ -131,8 +134,6 @@ public class NyanPaper extends WallpaperService {
 			mVisible = false;
 			mDroidHandler.removeCallbacks(mDrawFrame);
 		}
-
-		private int frameCount;
 
 		/**
 		 * Draw a single animation frame.

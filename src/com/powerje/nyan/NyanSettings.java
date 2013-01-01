@@ -17,13 +17,10 @@ public class NyanSettings extends PreferenceActivity implements
         addPreferencesFromResource(R.xml.nyan_settings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(
                 this);
-        getListView().setBackgroundColor(Color.TRANSPARENT);
-        getListView().setCacheColorHint(Color.TRANSPARENT);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        int c = Color.argb(200, 50, 50, 50);
+        getListView().setBackgroundColor(c);
+        getListView().setCacheColorHint(c);
     }
 
     @Override

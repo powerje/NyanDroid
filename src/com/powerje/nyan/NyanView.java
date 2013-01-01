@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import com.powerje.nyan.sprites.NyanDroid;
 import com.powerje.nyan.sprites.Rainbow;
 import com.powerje.nyan.sprites.Stars;
@@ -30,7 +29,8 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 	private String mRainbowImage;
 	private String mStarImage;
 	private int mMaxDim;
-	
+    private int mAnimationSpeed;
+    private int mSizeMod;
 	/** Animated NyanDroid. */
 	private NyanDroid mNyanDroid;
 	/** Animated rainbow. */
@@ -59,14 +59,13 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		setupPrefs();
 		
 		getHolder().addCallback(this);
-
 		hasSetup = false;
-		mMaxDim = scaleBy / 20;
+		mMaxDim = (int) Math.pow(2, mSizeMod + 2);
 		setupAnimations();
 	}
 
 	private void setupAnimations() {
-		// initialize Neandroid
+		// initialize Nyan Droid
 		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
 		// initialize Rainbow
@@ -86,11 +85,13 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		mPreferencesChanged = true;
 	}
 
-	private void setupPrefs() {
-		mDroidImage = mPrefs.getString("droid_image", "nyanwich");
-		mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
-		mStarImage = mPrefs.getString("star_image", "white");
-	}
+    private void setupPrefs() {
+        mDroidImage = mPrefs.getString("droid_image", "nyanwich");
+        mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
+        mStarImage = mPrefs.getString("star_image", "white");
+        mSizeMod = mPrefs.getInt("size_mod", 10);
+        mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
+    }
 	
 	public void surfaceCreated(SurfaceHolder holder) {
 		mThread = new DrawingThread(getHolder(), this);
@@ -172,7 +173,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 						myThreadSurfaceView.onDraw(c);
 					}
 
-					sleep(1000 / 30);
+					sleep(1000 / (mAnimationSpeed * 10));
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
