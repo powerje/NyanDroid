@@ -177,6 +177,8 @@ public class NyanDroid {
 	 * @return the height of an individual frame.
 	 */
 	public int getFrameHeight() {
+        // Oh god just redo this stuff, this is terrible
+        if (isBlank) return 256;
 		return mFrames.get(0).getHeight();
 	}
 
@@ -184,6 +186,7 @@ public class NyanDroid {
 	 * @return the width of an individual frame.
 	 */
 	public int getFrameWidth() {
+        if (isBlank) return 256;
 		return mFrames.get(0).getWidth();
 	}
 
