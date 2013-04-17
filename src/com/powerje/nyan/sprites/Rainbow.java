@@ -1,14 +1,13 @@
 package com.powerje.nyan.sprites;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import com.powerje.nyan.NyanUtils;
 import com.powerje.nyan.R;
+
+import java.util.ArrayList;
 
 public class Rainbow {
 	final Context mContext;
@@ -33,6 +32,11 @@ public class Rainbow {
 					R.drawable.neapolitan_rainbow_frame0, maxDim));
 			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
 					R.drawable.neapolitan_rainbow_frame1, maxDim));
+        } else if (image.equals("mono")) {
+            mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+                    R.drawable.monochrome_rainbow_0, maxDim));
+            mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+                    R.drawable.monochrome_rainbow_1, maxDim));
 		} else {
 			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
 					R.drawable.rainbow_frame0, maxDim));

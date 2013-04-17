@@ -1,16 +1,15 @@
 package com.powerje.nyan.sprites;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 import com.powerje.nyan.NyanUtils;
 import com.powerje.nyan.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Stars {
 	
@@ -25,7 +24,8 @@ public class Stars {
 	final Context mContext;
 	final private Paint mPaint;
 
-	final private static int MAX_NEW_STARS = 5;
+	private static int MAX_NEW_STARS = 5;
+    private boolean reverse = false;
 
 	final int[] whiteDrawables = { R.drawable.star0, R.drawable.star1,
 			R.drawable.star2, R.drawable.star3, R.drawable.star4,
@@ -36,10 +36,25 @@ public class Stars {
 			R.drawable.yellow_star2, R.drawable.yellow_star3, R.drawable.yellow_star4,
 			R.drawable.yellow_star5, R.drawable.yellow_star6, R.drawable.yellow_star7,
 			R.drawable.yellow_star8, R.drawable.yellow_star9 };
-	
-	final int mNumberOfFrames = whiteDrawables.length;
 
-	boolean mMovingUp;
+    final int[] noDrawable = {R.drawable.no};
+
+    final int[] icsDrawables = {
+            R.drawable.nyandroid00,
+            R.drawable.nyandroid01,
+            R.drawable.nyandroid02,
+            R.drawable.nyandroid03,
+            R.drawable.nyandroid04,
+            R.drawable.nyandroid05,
+            R.drawable.nyandroid06,
+            R.drawable.nyandroid07,
+            R.drawable.nyandroid08,
+            R.drawable.nyandroid09,
+            R.drawable.nyandroid10,
+            R.drawable.nyandroid11,
+    };
+
+	final int mNumberOfFrames;
 
 	static class Star {
 		int x;
@@ -55,29 +70,40 @@ public class Stars {
 		mContext = c;
 		mPaint = paint;
 		int[] drawables;
-		
+        mLargeStars = new ArrayList<Bitmap>();
+        int dimMod = 1;
 		if (image.equals("white")) {
-			drawables = whiteDrawables;
-		} else {
-			drawables = yellowDrawables;
-		}
-		
-		mLargeStars = new ArrayList<Bitmap>();
+            drawables = whiteDrawables;
+		} else if (image.equals("yellow")) {
+            drawables = yellowDrawables;
+        } else if (image.equals("no")) {
+            drawables = noDrawable;
+            // The 'no' can be overwhelming
+            MAX_NEW_STARS = 1;
+        } else {
+            drawables = icsDrawables;
+            reverse = true;
+            MAX_NEW_STARS = 1;
+            dimMod = 0;
+        }
+
+        mNumberOfFrames = drawables.length;
+
 		for (int i = 0; i < drawables.length; i++) {
 			mLargeStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
-					maxDim / 2));
+					maxDim / (dimMod +1)));
 		}
 
 		mMediumStars = new ArrayList<Bitmap>();
 		for (int i = 0; i < drawables.length; i++) {
 			mMediumStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
-					maxDim / 3));
+					maxDim / (dimMod + 2)));
 		}
 
 		mSmallStars = new ArrayList<Bitmap>();
 		for (int i = 0; i < drawables.length; i++) {
 			mSmallStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
-					maxDim / 4));
+					maxDim / (dimMod + 3)));
 		}
 	}
 
@@ -87,7 +113,11 @@ public class Stars {
 		while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
 			// create new star
 			Star s = new Star();
-			s.x = c.getWidth();
+            if (reverse) {
+                s.x = -40;
+            } else {
+			    s.x = c.getWidth();
+            }
 			s.y = mRandom.nextInt(c.getHeight());
 			s.frame = mRandom.nextInt(mNumberOfFrames);
 
@@ -115,11 +145,19 @@ public class Stars {
 			c.drawBitmap(s.stars.get(s.frame), s.x, s.y, mPaint);
 			s.frame++;
 			s.frame %= mNumberOfFrames;
-			s.x -= s.speed;
-			if (s.x < -s.width) {
-				stars.remove(i);
-				i--;
-			}
+            if (reverse) {
+                s.x += s.speed;
+                if (s.x > c.getWidth()) {
+                    stars.remove(i);
+                    i--;
+                }
+            } else {
+			    s.x -= s.speed;
+                if (s.x < -c.getWidth()) {
+                    stars.remove(i);
+                    i--;
+                }
+            }
 		}
 	}
 }

@@ -48,6 +48,7 @@ public class NyanDroid {
 	 *            used to draw.
 	 */
 	public NyanDroid(Context c, int maxDim, Paint paint, String image) {
+
 		mContext = c;
 		mPaint = paint;
 		mDroid = image;
@@ -96,6 +97,13 @@ public class NyanDroid {
 		} else if (image.equals("tardis")) {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.tardis,
 					maxDim));
+        } else if (image.equals("grump")) {
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_0, maxDim));
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_1, maxDim));
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_2, maxDim));
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_3, maxDim));
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_4, maxDim));
+            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_5, maxDim));
 		} else {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
 					maxDim));
