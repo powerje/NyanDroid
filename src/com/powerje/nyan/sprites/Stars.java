@@ -24,6 +24,8 @@ public class Stars {
 	final Context mContext;
 	final private Paint mPaint;
 
+    private boolean isBlank = false;
+
 	private static int MAX_NEW_STARS = 5;
     private boolean reverse = false;
 
@@ -70,7 +72,7 @@ public class Stars {
 		mContext = c;
 		mPaint = paint;
 		int[] drawables;
-        mLargeStars = new ArrayList<Bitmap>();
+
         int dimMod = 1;
 		if (image.equals("white")) {
             drawables = whiteDrawables;
@@ -80,15 +82,23 @@ public class Stars {
             drawables = noDrawable;
             // The 'no' can be overwhelming
             MAX_NEW_STARS = 1;
-        } else {
+        } else if (image.equals("ics_egg")) {
             drawables = icsDrawables;
             reverse = true;
             MAX_NEW_STARS = 1;
             dimMod = 0;
+        } else {
+            isBlank = true;
+            mNumberOfFrames = 0;
+            mSmallStars = null;
+            mMediumStars = null;
+            mLargeStars = null;
+            return;
         }
 
         mNumberOfFrames = drawables.length;
 
+        mLargeStars = new ArrayList<Bitmap>();
 		for (int i = 0; i < drawables.length; i++) {
 			mLargeStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
 					maxDim / (dimMod +1)));
@@ -108,6 +118,10 @@ public class Stars {
 	}
 
 	public void draw(Canvas c) {
+        if (isBlank) {
+            return;
+        }
+
 		int newStars = 0;
 		// create some arbitrary number of stars up to a given max
 		while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {

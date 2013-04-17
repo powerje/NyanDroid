@@ -17,7 +17,7 @@ public class Rainbow {
 	private int mCenterX;
 	private int mCenterY;
 	private int mOffset;
-
+    private boolean isBlank = false;
 	private int currentFrame;
 	final private Paint mPaint;
 
@@ -37,16 +37,23 @@ public class Rainbow {
                     R.drawable.monochrome_rainbow_0, maxDim));
             mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
                     R.drawable.monochrome_rainbow_1, maxDim));
-		} else {
+		} else if (image.equals("rainbow")) {
 			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
 					R.drawable.rainbow_frame0, maxDim));
 			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
 					R.drawable.rainbow_frame1, maxDim));
-		}
+		} else {
+            isBlank = true;
+            rainbowWidth = 0;
+            return;
+        }
 		rainbowWidth = mFrames.get(0).getWidth();
 	}
 
 	public void draw(Canvas c, boolean animate) {
+        if (isBlank) return;
+
+
 		int numberRainbowsFromCenter = (c.getWidth() / 2) / rainbowWidth;
 
 		for (int i = 0; i < numberRainbowsFromCenter; i++) {
@@ -66,6 +73,8 @@ public class Rainbow {
 	}
 
 	public int getFrameWidth() {
+        if (isBlank) return 0;
+
 		return mFrames.get(0).getWidth();
 	}
 

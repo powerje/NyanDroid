@@ -7,6 +7,7 @@
         <item>"DroidTV"</item>
         <item>"Tardis"</item>
         <item>"Grumpy Cat"</item>
+        <item>"None"</item>
     </string-array>
     
     <string-array name="nyan_shapeprefix">
@@ -15,29 +16,34 @@
         <item>"droidtv"</item>
         <item>"tardis"</item>
         <item>"grump"</item>
+        <item>"none"</item>
 	</string-array>
 	
     <string-array name="rainbow_shapenames">
         <item>"Neapolitan"</item>
         <item>"Rainbow"</item>
         <item>"Grumpy Rainbow"</item>
+        <item>"None"</item>
     </string-array>
     <string-array name="rainbow_shapeprefixes">
         <item>"neapolitan"</item>
         <item>"rainbow"</item>
         <item>"mono"</item>
+        <item>"none"</item>
     </string-array>
     <string-array name="star_shapenames">
         <item>"White"</item>
         <item>"Yellow"</item>
         <item>"No"</item>
         <item>"ICS Easter Egg"</item>
+        <item>"None"</item>
     </string-array>
     <string-array name="star_shapeprefixes">
         <item>"white"</item>
         <item>"yellow"</item>
         <item>"no"</item>
         <item>"ics_egg"</item>
+        <item>"none"</item>
     </string-array>
 
 </resources>

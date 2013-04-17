@@ -37,6 +37,8 @@ public class NyanDroid {
 
 	private String mDroid;
 
+    private boolean isBlank = false;
+
 	/**
 	 * Construct NyanDroid.
 	 * 
@@ -104,7 +106,7 @@ public class NyanDroid {
             mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_3, maxDim));
             mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_4, maxDim));
             mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_5, maxDim));
-		} else {
+		} else if (image.equals("nyanwich")) {
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
 					maxDim));
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame1,
@@ -130,7 +132,10 @@ public class NyanDroid {
 					maxDim));
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
 					maxDim));
-		}
+		} else {
+            // None
+            isBlank = true;
+        }
 	}
 
 	/**
@@ -142,6 +147,11 @@ public class NyanDroid {
 	 *            move to next frame after drawing.
 	 */
 	public void draw(Canvas c, boolean animate) {
+        // Okay I'm lazy and implemented this year, whatever sue me, yes this is terrible
+        if (isBlank) {
+            return;
+        }
+
 		Bitmap toDraw = mFrames.get(currentFrame);
 		c.drawBitmap(toDraw, mCenterX - (toDraw.getWidth() / 2),
 				(mCenterY - toDraw.getHeight() / 2) + yOffset, mPaint);
