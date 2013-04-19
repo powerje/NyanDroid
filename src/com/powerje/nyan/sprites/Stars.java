@@ -115,7 +115,7 @@ public class Stars {
 	public void draw(Canvas c) {
 		int newStars = 0;
 		// create some arbitrary number of stars up to a given max
-		while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
+		while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS && stars.size() < 40) {
 			// create new star
 			Star s = new Star();
             if (reverse) {
