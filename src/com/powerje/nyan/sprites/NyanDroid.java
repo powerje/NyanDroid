@@ -147,7 +147,7 @@ public class NyanDroid {
 	 *            move to next frame after drawing.
 	 */
 	public void draw(Canvas c, boolean animate) {
-        // Okay I'm lazy and implemented this year, whatever sue me, yes this is terrible
+        // Okay I'm lazy and implemented this here, whatever sue me, yes this is terrible
         if (isBlank) {
             return;
         }

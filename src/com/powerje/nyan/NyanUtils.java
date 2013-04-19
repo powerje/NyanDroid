@@ -65,7 +65,7 @@ public class NyanUtils {
 		float scaleHeight = ((float) max) / height;
 		float scaleWidth = ((float) max) / width;
 
-		// createa matrix for the manipulation
+		// create a matrix for the manipulation
 		Matrix matrix = new Matrix();
 		// resize the bit map
 		matrix.postScale(scaleWidth, scaleHeight);
