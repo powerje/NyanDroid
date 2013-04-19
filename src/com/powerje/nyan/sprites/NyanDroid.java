@@ -37,6 +37,8 @@ public class NyanDroid {
 
 	private String mDroid;
 
+    private boolean isBlank;
+
 	/**
 	 * Construct NyanDroid.
 	 * 
@@ -57,12 +59,12 @@ public class NyanDroid {
 		mFrames = new ArrayList<Bitmap>();
 
 		if (image.equals("droidtv")) {
-			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+			repeatingFrame = NyanUtils.scaleWithRatio(c,
 					R.drawable.superman_gtv0, maxDim);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
-			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+			repeatingFrame = NyanUtils.scaleWithRatio(c,
 					R.drawable.superman_gtv1, maxDim);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
@@ -70,67 +72,72 @@ public class NyanDroid {
 		} else if (image.equals("ics_egg")) {
 			// hack because image sizes are different
 			maxDim += 20;
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid00, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid01, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid02, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid03, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid04, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid05, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid06, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid07, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid08, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid09, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid10, maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.nyandroid11, maxDim));
 		} else if (image.equals("tardis")) {
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.tardis,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.tardis,
 					maxDim));
         } else if (image.equals("grump")) {
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_0, maxDim));
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_1, maxDim));
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_2, maxDim));
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_3, maxDim));
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_4, maxDim));
-            mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.grump_frame_5, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_0, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_1, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_2, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_3, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_4, maxDim));
+            mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.grump_frame_5, maxDim));
 		} else if (image.equals("nyanwich")) {
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame0,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame0,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame1,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame1,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame2,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame2,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame3,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame3,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c,
+			mFrames.add(NyanUtils.scaleWithRatio(c,
 					R.drawable.superman0, maxDim));
 
-			repeatingFrame = NyanUtils.imageResourceToBitmap(c,
+			repeatingFrame = NyanUtils.scaleWithRatio(c,
 					R.drawable.superman1, maxDim);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 			mFrames.add(repeatingFrame);
 
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame4,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame4,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame5,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame5,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame6,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame6,
 					maxDim));
-			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
+			mFrames.add(NyanUtils.scaleWithRatio(c, R.drawable.frame7,
 					maxDim));
-		}
+		} else {
+            // Setting up to return some default values so
+            // weirdos who disappear this but still have
+            // the rainbow have it centered properly etc
+            isBlank = true;
+        }
 	}
 
 	/**
@@ -167,6 +174,7 @@ public class NyanDroid {
 	 * @return the height of an individual frame.
 	 */
 	public int getFrameHeight() {
+        if (isBlank) return 256;
 		return mFrames.get(0).getHeight();
 	}
 
@@ -174,6 +182,7 @@ public class NyanDroid {
 	 * @return the width of an individual frame.
 	 */
 	public int getFrameWidth() {
+        if (isBlank) return 256;
 		return mFrames.get(0).getWidth();
 	}
 

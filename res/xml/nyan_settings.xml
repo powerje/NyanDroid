@@ -39,7 +39,7 @@
         <com.robobunny.SeekBarPreference
             android:defaultValue="2"
             android:key="size_mod"
-            android:max="4"
+            android:max="10"
             android:summary="Adjust image size"
             android:title="Image size"
             robobunny:min="1"

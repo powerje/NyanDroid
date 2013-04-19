@@ -82,9 +82,9 @@ public class NyanPaper extends WallpaperService {
 			mSizeMod = mPrefs.getInt("size_mod", 2);
 			mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
 
-            mShowDroid = !"".equals(mDroidImage);
-            mShowRainbow = !"".equals(mRainbowImage);
-            mShowStars = !"".equals(mRainbowImage);
+            mShowDroid = !"none".equals(mDroidImage);
+            mShowRainbow = !"none".equals(mRainbowImage);
+            mShowStars = !"none".equals(mRainbowImage);
 		}
 		
 		@Override
@@ -120,7 +120,7 @@ public class NyanPaper extends WallpaperService {
 
 		private void setupAnimations() {
 			Context c = getApplicationContext();
-			mMaxDim = (int) Math.pow(2, mSizeMod + 2);
+			mMaxDim = 64 * mSizeMod;
 			Log.d(TAG, "mMaxDim: " + mMaxDim);
 			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 

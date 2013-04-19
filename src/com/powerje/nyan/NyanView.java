@@ -63,7 +63,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		
 		getHolder().addCallback(this);
 		hasSetup = false;
-		mMaxDim = (int) Math.pow(2, mSizeMod + 2);
+		mMaxDim = 64 * mSizeMod;
 		setupAnimations();
 	}
 
@@ -72,7 +72,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
 		// initialize Rainbow
-		mMaxDim = (int) (mNyanDroid.getFrameHeight() * .4);
+		mMaxDim =  (int) (mNyanDroid.getFrameHeight() * .4);
 		mRainbow = new Rainbow(mContext, mMaxDim, mPaint, mRainbowImage);
 
 		// remember offset for when drawing rainbows
@@ -95,9 +95,9 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
         mSizeMod = mPrefs.getInt("size_mod", 2);
         mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
 
-        mShowDroid = !"".equals(mDroidImage);
-        mShowRainbow = !"".equals(mRainbowImage);
-        mShowStars = !"".equals(mRainbowImage);
+        mShowDroid = !"none".equals(mDroidImage);
+        mShowRainbow = !"none".equals(mRainbowImage);
+        mShowStars = !"none".equals(mRainbowImage);
     }
 	
 	public void surfaceCreated(SurfaceHolder holder) {
