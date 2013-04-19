@@ -71,12 +71,20 @@ public class NyanPaper extends WallpaperService {
 			mPreferencesChanged = true;
 		}
 
+        private boolean mShowDroid;
+        private boolean mShowRainbow;
+        private boolean mShowStars;
+
 		private void setupPrefs() {
 			mDroidImage = mPrefs.getString("droid_image", "nyanwich");
 			mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
-			mStarImage = mPrefs.getString("star_image", "white");
+            mStarImage = mPrefs.getString("star_image", "white");
 			mSizeMod = mPrefs.getInt("size_mod", 2);
-			mAnimationSpeed = mPrefs.getInt("animation_speed", 3); 
+			mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
+
+            mShowDroid = !"".equals(mDroidImage);
+            mShowRainbow = !"".equals(mRainbowImage);
+            mShowStars = !"".equals(mRainbowImage);
 		}
 		
 		@Override
@@ -124,7 +132,8 @@ public class NyanPaper extends WallpaperService {
 			mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
 					- mRainbow.getFrameWidth());
 
-			mStars = new Stars(c, mMaxDim, mPaint, mStarImage);
+			mStars = new Stars(c, mMaxDim, mPaint, mStarImage, mAnimationSpeed);
+
 		}
 		
 		@Override
@@ -163,14 +172,22 @@ public class NyanPaper extends WallpaperService {
 						}
 
 						c.drawColor(getResources().getColor(R.color.nyanblue));
-						mStars.draw(c);
-						if (frameCount == 3) {
-							mRainbow.draw(c, true);
-							mNyanDroid.draw(c, true);
-						} else {
-							mRainbow.draw(c, false);
-							mNyanDroid.draw(c, false);
-						}
+
+                        if (mShowStars) {
+						    mStars.draw(c);
+                        }
+
+                        // This is ugly and dumb
+                        boolean animateFrame = frameCount == 3;
+
+                        if (mShowRainbow) {
+                            mRainbow.draw(c, animateFrame);
+                        }
+
+                        if (mShowDroid) {
+                            mNyanDroid.draw(c, animateFrame);
+                        }
+
 					}
 					frameCount %= 3;
 				}
@@ -183,7 +200,7 @@ public class NyanPaper extends WallpaperService {
 			mDroidHandler.removeCallbacks(mDrawFrame);
 			if (mVisible) {
 				// approx 30 fps
-				mDroidHandler.postDelayed(mDrawFrame, 1000 / (mAnimationSpeed * 10));
+                mDroidHandler.postDelayed(mDrawFrame, 1000 / 30);
 			}
 		}
 	}

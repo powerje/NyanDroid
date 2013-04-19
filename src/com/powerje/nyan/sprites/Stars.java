@@ -13,19 +13,17 @@ import java.util.Random;
 
 public class Stars {
 	
-	final ArrayList<Bitmap> mLargeStars;
-	final ArrayList<Bitmap> mMediumStars;
-	final ArrayList<Bitmap> mSmallStars;
+	private final ArrayList<Bitmap> mLargeStars;
+	private final ArrayList<Bitmap> mMediumStars;
+	private final ArrayList<Bitmap> mSmallStars;
 
-	final List<Star> stars = new ArrayList<Star>();
+	private final List<Star> stars = new ArrayList<Star>();
 
-	final Random mRandom = new Random();
+	private final Random mRandom = new Random();
 
-	final Context mContext;
-	final private Paint mPaint;
-
-    private boolean isBlank = false;
-
+	private final Context mContext;
+	private final Paint mPaint;
+    private final int mSpeed;
 	private static int MAX_NEW_STARS = 5;
     private boolean reverse = false;
 
@@ -67,8 +65,8 @@ public class Stars {
 		ArrayList<Bitmap> stars;
 	}
 
-	public Stars(Context c, int maxDim, Paint paint, String image) {
-
+	public Stars(Context c, int maxDim, Paint paint, String image, int speed) {
+        mSpeed = speed;
 		mContext = c;
 		mPaint = paint;
 		int[] drawables;
@@ -82,19 +80,16 @@ public class Stars {
             drawables = noDrawable;
             // The 'no' can be overwhelming
             MAX_NEW_STARS = 1;
-        } else if (image.equals("ics_egg")) {
+        } else { //if (image.equals("ics_egg")) {
             drawables = icsDrawables;
             reverse = true;
             MAX_NEW_STARS = 1;
             dimMod = 0;
-        } else {
-            isBlank = true;
-            mNumberOfFrames = 0;
-            mSmallStars = null;
-            mMediumStars = null;
-            mLargeStars = null;
-            return;
         }
+
+        // Add a little bit of crowd control for slow speeds
+        if (speed < 4)
+            MAX_NEW_STARS = speed;
 
         mNumberOfFrames = drawables.length;
 
@@ -118,10 +113,6 @@ public class Stars {
 	}
 
 	public void draw(Canvas c) {
-        if (isBlank) {
-            return;
-        }
-
 		int newStars = 0;
 		// create some arbitrary number of stars up to a given max
 		while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
@@ -138,18 +129,21 @@ public class Stars {
 			int size = mRandom.nextInt(3);
 
 			if (size == 0) {
-				s.speed = 30;
+				s.speed = 10;
 				s.width = mLargeStars.get(0).getWidth();
 				s.stars = mLargeStars;
 			} else if (size == 1) {
-				s.speed = 20;
+				s.speed = 5;
 				s.width = mMediumStars.get(0).getWidth();
 				s.stars = mMediumStars;
 			} else {
-				s.speed = 10;
+				s.speed = 1;
 				s.width = mSmallStars.get(0).getWidth();
 				s.stars = mSmallStars;
 			}
+
+            s.speed += mSpeed * 5;
+
 			stars.add(s);
 			newStars++;
 		}

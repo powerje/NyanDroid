@@ -30,7 +30,7 @@
             android:key="animation_speed"
             android:max="10"
             android:summary="Adjust animation speed"
-            android:title="Animation speed"
+            android:title="Starfield speed"
             robobunny:min="1"
             robobunny:unitsLeft=""
             robobunny:unitsRight="" />

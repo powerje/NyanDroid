@@ -37,8 +37,6 @@ public class NyanDroid {
 
 	private String mDroid;
 
-    private boolean isBlank = false;
-
 	/**
 	 * Construct NyanDroid.
 	 * 
@@ -132,10 +130,7 @@ public class NyanDroid {
 					maxDim));
 			mFrames.add(NyanUtils.imageResourceToBitmap(c, R.drawable.frame7,
 					maxDim));
-		} else {
-            // None
-            isBlank = true;
-        }
+		}
 	}
 
 	/**
@@ -147,11 +142,6 @@ public class NyanDroid {
 	 *            move to next frame after drawing.
 	 */
 	public void draw(Canvas c, boolean animate) {
-        // Okay I'm lazy and implemented this here, whatever sue me, yes this is terrible
-        if (isBlank) {
-            return;
-        }
-
 		Bitmap toDraw = mFrames.get(currentFrame);
 		c.drawBitmap(toDraw, mCenterX - (toDraw.getWidth() / 2),
 				(mCenterY - toDraw.getHeight() / 2) + yOffset, mPaint);
@@ -177,8 +167,6 @@ public class NyanDroid {
 	 * @return the height of an individual frame.
 	 */
 	public int getFrameHeight() {
-        // Oh god just redo this stuff, this is terrible
-        if (isBlank) return 256;
 		return mFrames.get(0).getHeight();
 	}
 
@@ -186,7 +174,6 @@ public class NyanDroid {
 	 * @return the width of an individual frame.
 	 */
 	public int getFrameWidth() {
-        if (isBlank) return 256;
 		return mFrames.get(0).getWidth();
 	}
 
