@@ -63,12 +63,12 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		
 		getHolder().addCallback(this);
 		hasSetup = false;
-		mMaxDim = 64 * mSizeMod;
+
 		setupAnimations();
 	}
 
 	private void setupAnimations() {
-		// initialize Nyan Droid
+        mMaxDim = 64 * mSizeMod;
 		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
 		// initialize Rainbow
@@ -92,12 +92,12 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
         mDroidImage = mPrefs.getString("droid_image", "nyanwich");
         mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
         mStarImage = mPrefs.getString("star_image", "white");
-        mSizeMod = mPrefs.getInt("size_mod", 2);
+        mSizeMod = mPrefs.getInt("size_mod", 5);
         mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
 
         mShowDroid = !"none".equals(mDroidImage);
         mShowRainbow = !"none".equals(mRainbowImage);
-        mShowStars = !"none".equals(mRainbowImage);
+        mShowStars = !"none".equals(mStarImage);
     }
 	
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -143,8 +143,10 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 			}
 
 			c.drawColor(getResources().getColor(R.color.nyanblue));
-			mStars.draw(c);
-            // This is ugly and dumb
+            if (mShowStars) {
+			    mStars.draw(c);
+            }
+
             boolean animateFrame = frameCount == 3;
 
             if (mShowRainbow) {

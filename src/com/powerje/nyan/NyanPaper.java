@@ -79,12 +79,12 @@ public class NyanPaper extends WallpaperService {
 			mDroidImage = mPrefs.getString("droid_image", "nyanwich");
 			mRainbowImage = mPrefs.getString("rainbow_image", "rainbow");
             mStarImage = mPrefs.getString("star_image", "white");
-			mSizeMod = mPrefs.getInt("size_mod", 2);
+			mSizeMod = mPrefs.getInt("size_mod", 5);
 			mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
 
             mShowDroid = !"none".equals(mDroidImage);
             mShowRainbow = !"none".equals(mRainbowImage);
-            mShowStars = !"none".equals(mRainbowImage);
+            mShowStars = !"none".equals(mStarImage);
 		}
 		
 		@Override
@@ -121,7 +121,6 @@ public class NyanPaper extends WallpaperService {
 		private void setupAnimations() {
 			Context c = getApplicationContext();
 			mMaxDim = 64 * mSizeMod;
-			Log.d(TAG, "mMaxDim: " + mMaxDim);
 			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
 			// initialize Rainbow
@@ -139,7 +138,6 @@ public class NyanPaper extends WallpaperService {
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
-			Log.d(TAG, "onSurfaceDestroyed");
 			mVisible = false;
 			mDroidHandler.removeCallbacks(mDrawFrame);
 		}
