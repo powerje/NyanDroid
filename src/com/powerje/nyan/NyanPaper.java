@@ -121,6 +121,8 @@ public class NyanPaper extends WallpaperService {
 		private void setupAnimations() {
 			Context c = getApplicationContext();
 			mMaxDim = 64 * mSizeMod;
+            int width = c.getResources().getDisplayMetrics().widthPixels;
+            mMaxDim = mMaxDim < width ? mMaxDim : width;
 			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
 			// initialize Rainbow

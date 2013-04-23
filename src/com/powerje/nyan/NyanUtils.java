@@ -56,21 +56,8 @@ public class NyanUtils {
 	}
 
 	public static Bitmap scaleWithRatio(Context c, int res, int max) {
-		Bitmap bmp = imageResourceToBitmap(c, res, max);
-
-		int width = bmp.getWidth();
-		int height = bmp.getHeight();
-
-		// calculate the scale - in this case = 0.4f
-		float scaleHeight = ((float) max) / height;
-		float scaleWidth = ((float) max) / width;
-
-		// create a matrix for the manipulation
-		Matrix matrix = new Matrix();
-		// resize the bit map
-		matrix.postScale(scaleWidth, scaleHeight);
-
-		// recreate the new Bitmap and return it
-		return Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, true);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPurgeable = true;
+        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(c.getResources(), res, opts), max, max, false);
 	}
 }

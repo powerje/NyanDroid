@@ -69,6 +69,10 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 
 	private void setupAnimations() {
         mMaxDim = 64 * mSizeMod;
+
+        int width = this.getContext().getResources().getDisplayMetrics().widthPixels;
+        mMaxDim = mMaxDim < width ? mMaxDim : width;
+
 		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
 		// initialize Rainbow
@@ -94,7 +98,6 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
         mStarImage = mPrefs.getString("star_image", "white");
         mSizeMod = mPrefs.getInt("size_mod", 5);
         mAnimationSpeed = mPrefs.getInt("animation_speed", 3);
-
         mShowDroid = !"none".equals(mDroidImage);
         mShowRainbow = !"none".equals(mRainbowImage);
         mShowStars = !"none".equals(mStarImage);
