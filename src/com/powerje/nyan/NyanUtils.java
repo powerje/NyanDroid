@@ -57,7 +57,25 @@ public class NyanUtils {
 
 	public static Bitmap scaleWithRatio(Context c, int res, int max) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        // compute the smallest size bitmap we need to read
+        BitmapFactory.decodeResource(c.getResources(), res, opts);
+        int w = opts.outWidth;
+        int h = opts.outHeight;
+        int s = 1;
+        while (true) {
+            if ((w / 2 < max) || (h / 2 < max)) {
+                break;
+            }
+            w /= 2;
+            h /= 2;
+            s++;
+        }
+
+        opts.inJustDecodeBounds = false;
         opts.inPurgeable = true;
+        opts.inSampleSize = s;
+
         return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(c.getResources(), res, opts), max, max, false);
 	}
 }
