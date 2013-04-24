@@ -50,23 +50,25 @@ public class Rainbow {
 		rainbowWidth = mFrames.get(0).getWidth();
 	}
 
-	public void draw(Canvas c, boolean animate) {
-        if (isBlank) return;
+    public void draw(Canvas c, boolean animate) {
+        synchronized (this) {
+            if (isBlank) return;
 
 
-		int numberRainbowsFromCenter = (c.getWidth() / 2) / rainbowWidth;
+            int numberRainbowsFromCenter = (c.getWidth() / 2) / rainbowWidth;
 
-		for (int i = 0; i < numberRainbowsFromCenter; i++) {
-			Bitmap toDraw = mFrames.get((currentFrame + (i % 2)) % 2);
-			c.drawBitmap(toDraw, mCenterX - (toDraw.getWidth() / 2) - mOffset
-					- (i * rainbowWidth), (mCenterY - toDraw.getHeight() / 2),
-					mPaint);
-		}
-		if (animate) {
-			currentFrame++;
-			currentFrame %= 2;
-		}
-	}
+            for (int i = 0; i < numberRainbowsFromCenter; i++) {
+                Bitmap toDraw = mFrames.get((currentFrame + (i % 2)) % 2);
+                c.drawBitmap(toDraw, mCenterX - (toDraw.getWidth() / 2) - mOffset
+                        - (i * rainbowWidth), (mCenterY - toDraw.getHeight() / 2),
+                        mPaint);
+            }
+            if (animate) {
+                currentFrame++;
+                currentFrame %= 2;
+            }
+        }
+    }
 
 	public void setOffset(int offset) {
 		mOffset = offset;
@@ -82,4 +84,13 @@ public class Rainbow {
 		mCenterX = x;
 		mCenterY = y;
 	}
+
+    public void recycle() {
+        synchronized (this) {
+            isBlank = true;
+            for (Bitmap b : mFrames) {
+                b.recycle();
+            }
+        }
+    }
 }

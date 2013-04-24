@@ -26,24 +26,25 @@ public class NyanActivity extends Activity {
         }
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		// scale by whichever is larger, width or height
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		int h = metrics.heightPixels;
-		int w = metrics.widthPixels;
-		int largest = h > w ? h : w;
-
-		mRoot = new NyanView(this, largest);
-		setContentView(mRoot);
-	}
 
 	public void onResume() {
 		super.onResume();
-		mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
-		mPlayer.setLooping(true);
+        // scale by whichever is larger, width or height
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        int h = metrics.heightPixels;
+        int w = metrics.widthPixels;
+        int largest = h > w ? h : w;
+
+        mRoot = new NyanView(this, largest);
+        setContentView(mRoot);
+
+        if (mPlayer == null) {
+		    mPlayer = MediaPlayer.create(this, R.raw.dyan_loop);
+		    mPlayer.setLooping(true);
+        } else {
+            mPlayer.start();
+        }
+
 		mPlayer.setScreenOnWhilePlaying(true);
 
 		try {
@@ -76,17 +77,17 @@ public class NyanActivity extends Activity {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		mPlayer.release();
-		mPlayer = null;
-	}
-
-	@Override
 	public void onPause() {
 		super.onPause();
 		mPlayer.pause();
 	}
+
+    public void onStop() {
+        super.onStop();
+        mRoot.cancel();
+        mRoot = null;
+        System.gc();
+    }
 
 	@Override
 	public void onDestroy() {

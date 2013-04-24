@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.powerje.nyan.sprites.NyanDroid;
@@ -67,11 +68,23 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		setupAnimations();
 	}
 
+    public void cancel() {
+        mThread.setRunning(false);
+        mNyanDroid.recycle();
+        mStars.recycle();
+        mRainbow.recycle();
+    }
+
+    public void start() {
+        mThread.setRunning(true);
+        setupAnimations();
+    }
+
 	private void setupAnimations() {
         mMaxDim = 64 * mSizeMod;
 
         int width = this.getContext().getResources().getDisplayMetrics().widthPixels;
-        mMaxDim = mMaxDim < width ? mMaxDim : width;
+        mMaxDim = mMaxDim < width ? mMaxDim : width - 64;
 
 		mNyanDroid = new NyanDroid(mContext, mMaxDim, mPaint, mDroidImage);
 
@@ -114,6 +127,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d("NyanView", "Surface destroyed");
 		boolean retry = true;
 		mThread.setRunning(false);
 		while (retry) {
@@ -163,7 +177,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		frameCount %= 3;
 	}
 
-	public class DrawingThread extends Thread {
+	public static class DrawingThread extends Thread {
 
 		private SurfaceHolder myThreadSurfaceHolder;
 		private NyanView myThreadSurfaceView;
