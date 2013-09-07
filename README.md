@@ -1,4 +1,4 @@
-Live wallpaper celebrating Ice Cream Nyanwiches.
+Live wallpaper celebrating Ice Cream Nyanwiches. Available on [Google Play](https://play.google.com/store/apps/details?id=com.powerje.nyan "Nyan Droid on Google Play").
 
 Nyan Droid created by [Daniel Sandler](https://plus.google.com/114592751246503219483/posts "Daniel Sandler on G+").
 
