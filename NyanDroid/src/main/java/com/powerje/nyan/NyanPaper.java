@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -30,7 +31,8 @@ public class NyanPaper extends WallpaperService {
 		private final Paint mPaint = new Paint();
 
 		private boolean mVisible;
-		private boolean hasSetup;
+		private boolean hasCenteredImages;
+        private boolean hasLoadedImages;
 		private SharedPreferences mPrefs;
 		private boolean mPreferencesChanged;
 
@@ -57,9 +59,8 @@ public class NyanPaper extends WallpaperService {
 
 		NyanEngine() {
 			mPaint.setColor(0xffffffff);
-
 			mPrefs = NyanPaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
-			mPrefs.registerOnSharedPreferenceChangeListener(this);
+            mPrefs.registerOnSharedPreferenceChangeListener(this);
 			onSharedPreferenceChanged(mPrefs, null);
 			setupPrefs();
 		}
@@ -114,26 +115,39 @@ public class NyanPaper extends WallpaperService {
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
 			mWidth = width;
-			hasSetup = false;
-			setupAnimations();
+			hasCenteredImages = false;
+			mPreferencesChanged = true;
 		}
 
 		private void setupAnimations() {
-			Context c = getApplicationContext();
-			mMaxDim = 64 * mSizeMod;
-            int width = c.getResources().getDisplayMetrics().widthPixels;
-            mMaxDim = mMaxDim < width ? mMaxDim : width - 64;
-			mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
+            hasLoadedImages = false;
+            new AsyncTask<Void,Void,Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Context c = getApplicationContext();
+                    mMaxDim = 64 * mSizeMod;
+                    int width = c.getResources().getDisplayMetrics().widthPixels;
+                    mMaxDim = mMaxDim < width ? mMaxDim : width - 64;
+                    mNyanDroid = new NyanDroid(c, mMaxDim, mPaint, mDroidImage);
 
-			// initialize Rainbow
-			mMaxDim = (int) (mNyanDroid.getFrameHeight() * .4);
-			mRainbow = new Rainbow(c, mMaxDim, mPaint, mRainbowImage);
+                    // initialize Rainbow
+                    mMaxDim = (int) (mNyanDroid.getFrameHeight() * .4);
+                    mRainbow = new Rainbow(c, mMaxDim, mPaint, mRainbowImage);
 
-			// remember offset for when drawing rainbows
-			mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
-					- mRainbow.getFrameWidth());
+                    // remember offset for when drawing rainbows
+                    mRainbow.setOffset((mNyanDroid.getFrameWidth() / 2)
+                            - mRainbow.getFrameWidth());
 
-			mStars = new Stars(c, mMaxDim, mPaint, mStarImage, mAnimationSpeed);
+                    mStars = new Stars(c, mMaxDim, mPaint, mStarImage, mAnimationSpeed);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    hasLoadedImages = true;
+                }
+
+            }.execute();
 
 		}
 		
@@ -154,21 +168,21 @@ public class NyanPaper extends WallpaperService {
 				setupAnimations();
 				mPreferencesChanged = false;
 				//must reset centers
-				hasSetup = false;
+				hasCenteredImages = false;
 			}
-			
+
 			Canvas c = null;
 			try {
 				c = holder.lockCanvas();
 				synchronized (holder) {
 					frameCount++;
-					if (c != null) {
-						if (!hasSetup) {
+					if (c != null && hasLoadedImages) {
+						if (!hasCenteredImages) {
 							mRainbow.setCenter(c.getWidth() / 2,
 									c.getHeight() / 2);
 							mNyanDroid.setCenter(c.getWidth() / 2,
 									c.getHeight() / 2);
-							hasSetup = true;
+							hasCenteredImages = true;
 						}
 
 						c.drawColor(getResources().getColor(R.color.nyanblue));

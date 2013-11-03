@@ -26,7 +26,6 @@ public class NyanActivity extends Activity {
         }
 	}
 
-
 	public void onResume() {
 		super.onResume();
         // scale by whichever is larger, width or height

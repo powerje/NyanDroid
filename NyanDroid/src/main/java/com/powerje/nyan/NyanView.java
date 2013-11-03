@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 import com.powerje.nyan.sprites.NyanDroid;
 import com.powerje.nyan.sprites.Rainbow;
 import com.powerje.nyan.sprites.Stars;
@@ -69,15 +71,39 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 	}
 
     public void cancel() {
-        mThread.setRunning(false);
-        mNyanDroid.recycle();
-        mStars.recycle();
-        mRainbow.recycle();
+        // Lazy way to ensure in post 4.0 that this executes after the asynctask in the start method
+        new AsyncTask<Void,Void,Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mThread.setRunning(false);
+                mNyanDroid.recycle();
+                mStars.recycle();
+                mRainbow.recycle();
+            }
+        }.execute();
     }
 
     public void start() {
-        mThread.setRunning(true);
-        setupAnimations();
+
+        new AsyncTask<Void,Void,Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                // Do image loading off the main thread
+                setupAnimations();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mThread.setRunning(true);
+            }
+        }.execute();
+
     }
 
 	private void setupAnimations() {
