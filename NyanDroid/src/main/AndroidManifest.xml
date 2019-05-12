@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.powerje.nyan"
     android:versionCode="9"
-    android:versionName="1.8.2" >
+    android:versionName="1.8.2"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="16" />
+    <uses-sdk tools:overrideLibrary="android.support.v7.appcompat" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
