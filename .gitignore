@@ -43,3 +43,5 @@ out
 *keystore
 local.*
 .gradle
+local.properties
+
