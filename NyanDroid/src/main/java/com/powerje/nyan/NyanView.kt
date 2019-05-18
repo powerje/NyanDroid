@@ -9,6 +9,7 @@ import android.os.AsyncTask
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.content.ContextCompat
 
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
@@ -67,12 +68,12 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
 
     fun cancel() {
         // Lazy way to ensure in post 4.0 that this executes after the asynctask in the start method
-        object : AsyncTask<Void, Void, Void>() {
-            override fun doInBackground(vararg params: Void): Void? {
+        object : AsyncTask<Void?, Void?, Void?>() {
+            override fun doInBackground(vararg params: Void?): Void? {
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
+            override fun onPostExecute(aVoid: Void?) {
                 mThread!!.setRunning(false)
                 mNyanDroid!!.recycle()
                 mStars!!.recycle()
@@ -82,7 +83,6 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
     }
 
     fun start() {
-
         object : AsyncTask<Void, Void, Void>() {
             override fun doInBackground(vararg params: Void): Void? {
                 // Do image loading off the main thread
@@ -94,7 +94,6 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
                 mThread!!.setRunning(true)
             }
         }.execute()
-
     }
 
     private fun setupAnimations() {
@@ -115,8 +114,7 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
         mStars = Stars(mContext, mMaxDim, mPaint, mStarImage!!, mAnimationSpeed)
     }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences,
-                                           key: String?) {
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         setupPrefs()
         mPreferencesChanged = true
     }
@@ -138,8 +136,7 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
         mThread!!.start()
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int,
-                                height: Int) {
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -152,7 +149,6 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
                 retry = false
             } catch (e: InterruptedException) {
             }
-
         }
     }
 
@@ -172,7 +168,7 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
                 hasSetup = true
             }
 
-            c.drawColor(resources.getColor(R.color.nyanblue))
+            c.drawColor(ContextCompat.getColor(mContext, R.color.nyanblue))
             if (mShowStars) {
                 mStars!!.draw(c)
             }
@@ -206,7 +202,7 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
                         myThreadSurfaceView.draw(c)
                     }
 
-                    Thread.sleep((1000 / 30).toLong())
+                    sleep((1000 / 30).toLong())
 
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
