@@ -8,6 +8,7 @@ import android.os.Handler
 import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.SurfaceHolder
+import androidx.core.content.ContextCompat
 
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
@@ -138,7 +139,7 @@ class NyanPaper : WallpaperService() {
         /**
          * Draw a single animation frame.
          */
-        fun drawFrame() {
+        private fun drawFrame() {
             val holder = surfaceHolder
 
             if (mPreferencesChanged) {
@@ -162,7 +163,7 @@ class NyanPaper : WallpaperService() {
                             hasCenteredImages = true
                         }
 
-                        c.drawColor(resources.getColor(R.color.nyanblue))
+                        c.drawColor(ContextCompat.getColor(this@NyanPaper, R.color.nyanblue))
 
                         if (mShowStars) {
                             mStars!!.draw(c)
@@ -197,8 +198,8 @@ class NyanPaper : WallpaperService() {
     }
 
     companion object {
-        val SHARED_PREFS_NAME = "nyandroidsettings"
-        private val TAG = "NyanPaper"
+        const val SHARED_PREFS_NAME = "nyandroidsettings"
+        private const val TAG = "NyanPaper"
         private var mWidth: Int = 0
     }
 }

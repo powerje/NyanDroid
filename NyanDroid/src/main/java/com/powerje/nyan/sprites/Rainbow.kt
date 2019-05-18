@@ -9,8 +9,8 @@ import com.powerje.nyan.R
 
 import java.util.ArrayList
 
-class Rainbow(internal val mContext: Context, maxDim: Int, private val mPaint: Paint, image: String) {
-    internal val mFrames: ArrayList<Bitmap>
+class Rainbow(mContext: Context, maxDim: Int, private val mPaint: Paint, image: String) {
+    private val mFrames = ArrayList<Bitmap>()
     private var rainbowWidth: Int = 0
 
     private var mCenterX: Int = 0
@@ -24,24 +24,26 @@ class Rainbow(internal val mContext: Context, maxDim: Int, private val mPaint: P
 
     init {
 
-        mFrames = ArrayList()
-        if (image == "neapolitan") {
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.neapolitan_rainbow_frame0, maxDim))
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.neapolitan_rainbow_frame1, maxDim))
-        } else if (image == "mono") {
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.monochrome_rainbow_0, maxDim))
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.monochrome_rainbow_1, maxDim))
-        } else if (image == "rainbow") {
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.rainbow_frame0, maxDim))
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
-                    R.drawable.rainbow_frame1, maxDim))
-        } else {
-            isBlank = true
+        when (image) {
+            "neapolitan" -> {
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.neapolitan_rainbow_frame0, maxDim))
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.neapolitan_rainbow_frame1, maxDim))
+            }
+            "mono" -> {
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.monochrome_rainbow_0, maxDim))
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.monochrome_rainbow_1, maxDim))
+            }
+            "rainbow" -> {
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.rainbow_frame0, maxDim))
+                mFrames.add(NyanUtils.maxHeightResourceToBitmap(mContext,
+                        R.drawable.rainbow_frame1, maxDim))
+            }
+            else -> isBlank = true
         }
 
         if (!isBlank) {

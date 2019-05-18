@@ -15,28 +15,18 @@ import java.util.ArrayList
  * @author powerj
  */
 class NyanDroid
-/**
- * Construct NyanDroid.
- *
- * @param c
- * context to be drawn in.
- * @param maxDim
- * maximize size of a side.
- * @param paint
- * used to draw.
- */
 (
         /** Context NyanDroid is being drawn in.  */
-        internal val mContext: Context, maxDim: Int,
+        context: Context, maxDim: Int,
         /** Paint with which to draw.  */
         private val mPaint: Paint, private val mDroid: String) {
     /** NyanDroid frames.  */
-    internal val mFrames: ArrayList<Bitmap>
+    private val mFrames = ArrayList<Bitmap>()
 
     /** Current y offset.  */
     private var yOffset: Int = 0
     /** True iff NyanDroid is moving upwards  */
-    internal var mMovingUp: Boolean = false
+    private var mMovingUp: Boolean = false
     /** Center x coordinate.  */
     private var mCenterX: Int = 0
     /** Center y coordinate.  */
@@ -62,87 +52,88 @@ class NyanDroid
         var maxDim = maxDim
         var repeatingFrame: Bitmap
 
-        mFrames = ArrayList()
+        when (mDroid) {
+            "droidtv" -> {
+                repeatingFrame = NyanUtils.scaleWithRatio(context,
+                        R.drawable.superman_gtv0, maxDim)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
+                repeatingFrame = NyanUtils.scaleWithRatio(context,
+                        R.drawable.superman_gtv1, maxDim)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
+            }
+            "ics_egg" -> {
+                // hack because image sizes are different
+                maxDim += 20
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid00, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid01, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid02, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid03, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid04, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid05, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid06, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid07, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid08, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid09, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid10, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.nyandroid11, maxDim))
+            }
+            "tardis" -> mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.tardis,
+                    maxDim))
+            "grump" -> {
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_0, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_1, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_2, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_3, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_4, maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_5, maxDim))
+            }
+            "nyanwich" -> {
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame0,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame1,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame2,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame3,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context,
+                        R.drawable.superman0, maxDim))
 
-        if (mDroid == "droidtv") {
-            repeatingFrame = NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.superman_gtv0, maxDim)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-            repeatingFrame = NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.superman_gtv1, maxDim)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-        } else if (mDroid == "ics_egg") {
-            // hack because image sizes are different
-            maxDim += 20
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid00, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid01, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid02, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid03, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid04, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid05, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid06, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid07, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid08, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid09, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid10, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.nyandroid11, maxDim))
-        } else if (mDroid == "tardis") {
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.tardis,
-                    maxDim))
-        } else if (mDroid == "grump") {
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_0, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_1, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_2, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_3, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_4, maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.grump_frame_5, maxDim))
-        } else if (mDroid == "nyanwich") {
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame0,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame1,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame2,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame3,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.superman0, maxDim))
+                repeatingFrame = NyanUtils.scaleWithRatio(context,
+                        R.drawable.superman1, maxDim)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
+                mFrames.add(repeatingFrame)
 
-            repeatingFrame = NyanUtils.scaleWithRatio(mContext,
-                    R.drawable.superman1, maxDim)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-            mFrames.add(repeatingFrame)
-
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame4,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame5,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame6,
-                    maxDim))
-            mFrames.add(NyanUtils.scaleWithRatio(mContext, R.drawable.frame7,
-                    maxDim))
-        } else {
-            // Setting up to return some default values so
-            // weirdos who disappear this but still have
-            // the rainbow have it centered properly etc
-            isBlank = true
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame4,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame5,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame6,
+                        maxDim))
+                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame7,
+                        maxDim))
+            }
+            else -> // Setting up to return some default values so
+                // weirdos who disappear this but still have
+                // the rainbow have it centered properly etc
+                isBlank = true
         }
     }
 

@@ -10,7 +10,7 @@ import com.powerje.nyan.R
 import java.util.ArrayList
 import java.util.Random
 
-class Stars(private val mContext: Context, maxDim: Int, private val mPaint: Paint, image: String, private val mSpeed: Int) {
+class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: String, private val mSpeed: Int) {
 
     private val mLargeStars: ArrayList<Bitmap>
     private val mMediumStars: ArrayList<Bitmap>
@@ -22,15 +22,15 @@ class Stars(private val mContext: Context, maxDim: Int, private val mPaint: Pain
     private var reverse = false
     private var isBlank = false
 
-    internal val whiteDrawables = intArrayOf(R.drawable.star0, R.drawable.star1, R.drawable.star2, R.drawable.star3, R.drawable.star4, R.drawable.star5, R.drawable.star6, R.drawable.star7, R.drawable.star8, R.drawable.star9)
+    private val whiteDrawables = intArrayOf(R.drawable.star0, R.drawable.star1, R.drawable.star2, R.drawable.star3, R.drawable.star4, R.drawable.star5, R.drawable.star6, R.drawable.star7, R.drawable.star8, R.drawable.star9)
 
-    internal val yellowDrawables = intArrayOf(R.drawable.yellow_star0, R.drawable.yellow_star1, R.drawable.yellow_star2, R.drawable.yellow_star3, R.drawable.yellow_star4, R.drawable.yellow_star5, R.drawable.yellow_star6, R.drawable.yellow_star7, R.drawable.yellow_star8, R.drawable.yellow_star9)
+    private val yellowDrawables = intArrayOf(R.drawable.yellow_star0, R.drawable.yellow_star1, R.drawable.yellow_star2, R.drawable.yellow_star3, R.drawable.yellow_star4, R.drawable.yellow_star5, R.drawable.yellow_star6, R.drawable.yellow_star7, R.drawable.yellow_star8, R.drawable.yellow_star9)
 
-    internal val noDrawable = intArrayOf(R.drawable.no)
+    private val noDrawable = intArrayOf(R.drawable.no)
 
-    internal val icsDrawables = intArrayOf(R.drawable.nyandroid00, R.drawable.nyandroid01, R.drawable.nyandroid02, R.drawable.nyandroid03, R.drawable.nyandroid04, R.drawable.nyandroid05, R.drawable.nyandroid06, R.drawable.nyandroid07, R.drawable.nyandroid08, R.drawable.nyandroid09, R.drawable.nyandroid10, R.drawable.nyandroid11)
+    private val icsDrawables = intArrayOf(R.drawable.nyandroid00, R.drawable.nyandroid01, R.drawable.nyandroid02, R.drawable.nyandroid03, R.drawable.nyandroid04, R.drawable.nyandroid05, R.drawable.nyandroid06, R.drawable.nyandroid07, R.drawable.nyandroid08, R.drawable.nyandroid09, R.drawable.nyandroid10, R.drawable.nyandroid11)
 
-    internal val mNumberOfFrames: Int
+    private val mNumberOfFrames: Int
 
     internal class Star {
         var x: Int = 0
@@ -45,19 +45,20 @@ class Stars(private val mContext: Context, maxDim: Int, private val mPaint: Pain
         val drawables: IntArray
 
         var dimMod = 1
-        if (image == "white") {
-            drawables = whiteDrawables
-        } else if (image == "yellow") {
-            drawables = yellowDrawables
-        } else if (image == "no") {
-            drawables = noDrawable
-            // The 'no' can be overwhelming
-            MAX_NEW_STARS = 1
-        } else { //if (image.equals("ics_egg")) {
-            drawables = icsDrawables
-            reverse = true
-            MAX_NEW_STARS = 1
-            dimMod = 0
+        when (image) {
+            "white" -> drawables = whiteDrawables
+            "yellow" -> drawables = yellowDrawables
+            "no" -> {
+                drawables = noDrawable
+                // The 'no' can be overwhelming
+                MAX_NEW_STARS = 1
+            }
+            else -> { //if (image.equals("ics_egg")) {
+                drawables = icsDrawables
+                reverse = true
+                MAX_NEW_STARS = 1
+                dimMod = 0
+            }
         }
 
         // Add a little bit of crowd control for slow speeds
@@ -102,20 +103,22 @@ class Stars(private val mContext: Context, maxDim: Int, private val mPaint: Pain
                 s.y = mRandom.nextInt(c.height)
                 s.frame = mRandom.nextInt(mNumberOfFrames)
 
-                val size = mRandom.nextInt(3)
-
-                if (size == 0) {
-                    s.speed = 10
-                    s.width = mLargeStars[0].width
-                    s.stars = mLargeStars
-                } else if (size == 1) {
-                    s.speed = 5
-                    s.width = mMediumStars[0].width
-                    s.stars = mMediumStars
-                } else {
-                    s.speed = 1
-                    s.width = mSmallStars[0].width
-                    s.stars = mSmallStars
+                when (mRandom.nextInt(3)) {
+                    0 -> {
+                        s.speed = 10
+                        s.width = mLargeStars[0].width
+                        s.stars = mLargeStars
+                    }
+                    1 -> {
+                        s.speed = 5
+                        s.width = mMediumStars[0].width
+                        s.stars = mMediumStars
+                    }
+                    else -> {
+                        s.speed = 1
+                        s.width = mSmallStars[0].width
+                        s.stars = mSmallStars
+                    }
                 }
 
                 s.speed += mSpeed * 5

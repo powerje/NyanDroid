@@ -82,20 +82,6 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
         }.execute()
     }
 
-    fun start() {
-        object : AsyncTask<Void, Void, Void>() {
-            override fun doInBackground(vararg params: Void): Void? {
-                // Do image loading off the main thread
-                setupAnimations()
-                return null
-            }
-
-            override fun onPostExecute(aVoid: Void) {
-                mThread!!.setRunning(true)
-            }
-        }.execute()
-    }
-
     private fun setupAnimations() {
         mMaxDim = 64 * mSizeMod
 
