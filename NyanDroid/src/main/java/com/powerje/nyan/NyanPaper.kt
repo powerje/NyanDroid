@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NyanPaper : WallpaperService() {
     private val droidHandler = Handler()
@@ -103,31 +106,24 @@ class NyanPaper : WallpaperService() {
 
         private fun setupAnimations() {
             hasLoadedImages = false
-            object : AsyncTask<Void?, Void?, Void?>() {
-                override fun doInBackground(vararg params: Void?): Void? {
-                    val c = applicationContext
-                    maxDim = 64 * sizeMod
-                    val width = c.resources.displayMetrics.widthPixels
-                    maxDim = if (maxDim < width) maxDim else width - 64
-                    nyanDroid = NyanDroid(c, maxDim, paint, droidImage!!)
+            GlobalScope.launch {
+                val c = applicationContext
+                maxDim = 64 * sizeMod
+                val width = c.resources.displayMetrics.widthPixels
+                maxDim = if (maxDim < width) maxDim else width - 64
+                nyanDroid = NyanDroid(c, maxDim, paint, droidImage!!)
 
-                    // initialize Rainbow
-                    maxDim = (nyanDroid!!.frameHeight * .4).toInt()
-                    rainbow = Rainbow(c, maxDim, paint, rainbowImage!!)
+                // initialize Rainbow
+                maxDim = (nyanDroid!!.frameHeight * .4).toInt()
+                rainbow = Rainbow(c, maxDim, paint, rainbowImage!!)
 
-                    // remember offset for when drawing rainbows
-                    rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
+                // remember offset for when drawing rainbows
+                rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
 
-                    stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
-                    return null
-                }
+                stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
 
-                override fun onPostExecute(aVoid: Void?) {
-                    hasLoadedImages = true
-                }
-
-            }.execute()
-
+                hasLoadedImages = true
+            }
         }
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {

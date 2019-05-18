@@ -67,19 +67,10 @@ class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(contex
     }
 
     fun cancel() {
-        // Lazy way to ensure in post 4.0 that this executes after the asynctask in the start method
-        object : AsyncTask<Void?, Void?, Void?>() {
-            override fun doInBackground(vararg params: Void?): Void? {
-                return null
-            }
-
-            override fun onPostExecute(aVoid: Void?) {
-                thread!!.setRunning(false)
-                nyanDroid!!.recycle()
-                stars!!.recycle()
-                rainbow!!.recycle()
-            }
-        }.execute()
+        thread!!.setRunning(false)
+        nyanDroid!!.recycle()
+        stars!!.recycle()
+        rainbow!!.recycle()
     }
 
     private fun setupAnimations() {
@@ -138,7 +129,7 @@ class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(contex
         }
     }
 
-    override fun draw(c: Canvas?) {
+    fun drawFrame(c: Canvas?) {
         frameCount++
         if (c != null) {
             if (preferencesChanged) {
@@ -185,7 +176,7 @@ class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(contex
                 try {
                     c = myThreadSurfaceHolder.lockCanvas(null)
                     synchronized(myThreadSurfaceHolder) {
-                        myThreadSurfaceView.draw(c)
+                        myThreadSurfaceView.drawFrame(c)
                     }
 
                     sleep((1000 / 30).toLong())
