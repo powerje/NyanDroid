@@ -165,13 +165,10 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 		}
 	}
 
-	/**
-	 * Draw a single animation frame.
-	 */
-	public void onDraw(Canvas c) {
+	@Override
+	public void draw(Canvas c) {
 		frameCount++;
 		if (c != null) {
-			
 			if (mPreferencesChanged) {
 				setupAnimations();
 				mPreferencesChanged = false;
@@ -225,7 +222,7 @@ public class NyanView extends SurfaceView implements SurfaceHolder.Callback, OnS
 				try {
 					c = myThreadSurfaceHolder.lockCanvas(null);
 					synchronized (myThreadSurfaceHolder) {
-						myThreadSurfaceView.onDraw(c);
+						myThreadSurfaceView.draw(c);
 					}
 
 					sleep(1000 / 30);
