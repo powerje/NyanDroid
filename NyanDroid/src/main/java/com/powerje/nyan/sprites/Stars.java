@@ -96,19 +96,19 @@ public class Stars {
 
         mLargeStars = new ArrayList<Bitmap>();
         for (int i = 0; i < drawables.length; i++) {
-            mLargeStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
+            mLargeStars.add(NyanUtils.INSTANCE.scaleWithRatio(c, drawables[i],
                     maxDim / (dimMod +1)));
         }
 
         mMediumStars = new ArrayList<Bitmap>();
         for (int i = 0; i < drawables.length; i++) {
-            mMediumStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
+            mMediumStars.add(NyanUtils.INSTANCE.scaleWithRatio(c, drawables[i],
                     maxDim / (dimMod + 2)));
         }
 
         mSmallStars = new ArrayList<Bitmap>();
         for (int i = 0; i < drawables.length; i++) {
-            mSmallStars.add(NyanUtils.scaleWithRatio(c, drawables[i],
+            mSmallStars.add(NyanUtils.INSTANCE.scaleWithRatio(c, drawables[i],
                     maxDim / (dimMod + 3)));
         }
     }

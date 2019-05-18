@@ -28,19 +28,19 @@ public class Rainbow {
 
 		mFrames = new ArrayList<Bitmap>();
 		if (image.equals("neapolitan")) {
-			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+			mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
 					R.drawable.neapolitan_rainbow_frame0, maxDim));
-			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+			mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
 					R.drawable.neapolitan_rainbow_frame1, maxDim));
         } else if (image.equals("mono")) {
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+            mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
                     R.drawable.monochrome_rainbow_0, maxDim));
-            mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+            mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
                     R.drawable.monochrome_rainbow_1, maxDim));
 		} else if (image.equals("rainbow")) {
-			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+			mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
 					R.drawable.rainbow_frame0, maxDim));
-			mFrames.add(NyanUtils.maxHeightResourceToBitmap(c,
+			mFrames.add(NyanUtils.INSTANCE.maxHeightResourceToBitmap(c,
 					R.drawable.rainbow_frame1, maxDim));
 		} else {
             isBlank = true;
