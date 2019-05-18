@@ -19,43 +19,43 @@ import com.powerje.nyan.sprites.Stars
  * NyanView draws NyanDroid flying through space distributing Ice Cream Nyanwich.
  * @author powerj
  */
-class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mContext), SurfaceHolder.Callback, OnSharedPreferenceChangeListener {
+class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(context), SurfaceHolder.Callback, OnSharedPreferenceChangeListener {
 
     /** Paint to draw with.  */
-    private val mPaint = Paint()
+    private val paint = Paint()
     /** True iff dimensions have been setup.  */
     private var hasSetup: Boolean = false
 
-    private var mPrefs: SharedPreferences? = null
-    private var mPreferencesChanged: Boolean = false
-    private var mDroidImage: String? = null
-    private var mRainbowImage: String? = null
-    private var mStarImage: String? = null
-    private var mShowDroid: Boolean = false
-    private var mShowRainbow: Boolean = false
-    private var mShowStars: Boolean = false
-    private var mMaxDim: Int = 0
-    private var mAnimationSpeed: Int = 0
-    private var mSizeMod: Int = 0
+    private var prefs: SharedPreferences? = null
+    private var preferencesChanged: Boolean = false
+    private var droidImage: String? = null
+    private var rainbowImage: String? = null
+    private var starImage: String? = null
+    private var showDroid: Boolean = false
+    private var showRainbow: Boolean = false
+    private var showStars: Boolean = false
+    private var maxDim: Int = 0
+    private var animationSpeed: Int = 0
+    private var sizeMod: Int = 0
     /** Animated NyanDroid.  */
-    private var mNyanDroid: NyanDroid? = null
+    private var nyanDroid: NyanDroid? = null
     /** Animated rainbow.  */
-    private var mRainbow: Rainbow? = null
+    private var rainbow: Rainbow? = null
     /** Animated star field.  */
-    private var mStars: Stars? = null
+    private var stars: Stars? = null
     /** Count number of elapsed frames to time animations.  */
     private var frameCount: Int = 0
 
-    private var mThread: DrawingThread? = null
+    private var thread: DrawingThread? = null
 
     init {
-        mPaint.color = -0x1
+        paint.color = -0x1
         init(scaleBy)
     }
 
     private fun init(scaleBy: Int) {
-        mPrefs = mContext.getSharedPreferences(NyanPaper.SHARED_PREFS_NAME, 0)
-        mPrefs?.let {
+        prefs = context.getSharedPreferences(NyanPaper.SHARED_PREFS_NAME, 0)
+        prefs?.let {
             it.registerOnSharedPreferenceChangeListener(this)
             onSharedPreferenceChanged(it, null)
         }
@@ -74,52 +74,52 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
             }
 
             override fun onPostExecute(aVoid: Void?) {
-                mThread!!.setRunning(false)
-                mNyanDroid!!.recycle()
-                mStars!!.recycle()
-                mRainbow!!.recycle()
+                thread!!.setRunning(false)
+                nyanDroid!!.recycle()
+                stars!!.recycle()
+                rainbow!!.recycle()
             }
         }.execute()
     }
 
     private fun setupAnimations() {
-        mMaxDim = 64 * mSizeMod
+        maxDim = 64 * sizeMod
 
         val width = this.context.resources.displayMetrics.widthPixels
-        mMaxDim = if (mMaxDim < width) mMaxDim else width - 64
+        maxDim = if (maxDim < width) maxDim else width - 64
 
-        mNyanDroid = NyanDroid(mContext, mMaxDim, mPaint, mDroidImage!!)
+        nyanDroid = NyanDroid(context, maxDim, paint, droidImage!!)
 
         // initialize Rainbow
-        mMaxDim = (mNyanDroid!!.frameHeight * .4).toInt()
-        mRainbow = Rainbow(mContext, mMaxDim, mPaint, mRainbowImage!!)
+        maxDim = (nyanDroid!!.frameHeight * .4).toInt()
+        rainbow = Rainbow(context, maxDim, paint, rainbowImage!!)
 
         // remember offset for when drawing rainbows
-        mRainbow!!.setOffset(mNyanDroid!!.frameWidth / 2 - mRainbow!!.frameWidth)
+        rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
 
-        mStars = Stars(mContext, mMaxDim, mPaint, mStarImage!!, mAnimationSpeed)
+        stars = Stars(context, maxDim, paint, starImage!!, animationSpeed)
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         setupPrefs()
-        mPreferencesChanged = true
+        preferencesChanged = true
     }
 
     private fun setupPrefs() {
-        mDroidImage = mPrefs!!.getString("droid_image", "nyanwich")
-        mRainbowImage = mPrefs!!.getString("rainbow_image", "rainbow")
-        mStarImage = mPrefs!!.getString("star_image", "white")
-        mSizeMod = mPrefs!!.getInt("size_mod", 5)
-        mAnimationSpeed = mPrefs!!.getInt("animation_speed", 3)
-        mShowDroid = "none" != mDroidImage
-        mShowRainbow = "none" != mRainbowImage
-        mShowStars = "none" != mStarImage
+        droidImage = prefs!!.getString("droid_image", "nyanwich")
+        rainbowImage = prefs!!.getString("rainbow_image", "rainbow")
+        starImage = prefs!!.getString("star_image", "white")
+        sizeMod = prefs!!.getInt("size_mod", 5)
+        animationSpeed = prefs!!.getInt("animation_speed", 3)
+        showDroid = "none" != droidImage
+        showRainbow = "none" != rainbowImage
+        showStars = "none" != starImage
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        mThread = DrawingThread(getHolder(), this)
-        mThread!!.setRunning(true)
-        mThread!!.start()
+        thread = DrawingThread(getHolder(), this)
+        thread!!.setRunning(true)
+        thread!!.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -128,10 +128,10 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         Log.d("NyanView", "Surface destroyed")
         var retry = true
-        mThread!!.setRunning(false)
+        thread!!.setRunning(false)
         while (retry) {
             try {
-                mThread!!.join()
+                thread!!.join()
                 retry = false
             } catch (e: InterruptedException) {
             }
@@ -141,32 +141,32 @@ class NyanView(private val mContext: Context, scaleBy: Int) : SurfaceView(mConte
     override fun draw(c: Canvas?) {
         frameCount++
         if (c != null) {
-            if (mPreferencesChanged) {
+            if (preferencesChanged) {
                 setupAnimations()
-                mPreferencesChanged = false
+                preferencesChanged = false
                 //must reset centers
                 hasSetup = false
             }
 
             if (!hasSetup) {
-                mRainbow!!.setCenter(c.width / 2, c.height / 2)
-                mNyanDroid!!.setCenter(c.width / 2, c.height / 2)
+                rainbow!!.setCenter(c.width / 2, c.height / 2)
+                nyanDroid!!.setCenter(c.width / 2, c.height / 2)
                 hasSetup = true
             }
 
-            c.drawColor(ContextCompat.getColor(mContext, R.color.nyanblue))
-            if (mShowStars) {
-                mStars!!.draw(c)
+            c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
+            if (showStars) {
+                stars!!.draw(c)
             }
 
             val animateFrame = frameCount == 3
 
-            if (mShowRainbow) {
-                mRainbow!!.draw(c, animateFrame)
+            if (showRainbow) {
+                rainbow!!.draw(c, animateFrame)
             }
 
-            if (mShowDroid) {
-                mNyanDroid!!.draw(c, animateFrame)
+            if (showDroid) {
+                nyanDroid!!.draw(c, animateFrame)
             }
         }
         frameCount %= 3

@@ -15,47 +15,47 @@ import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
 
 class NyanPaper : WallpaperService() {
-    private val mDroidHandler = Handler()
+    private val droidHandler = Handler()
 
     override fun onCreateEngine(): Engine {
         return NyanEngine()
     }
 
     internal inner class NyanEngine : WallpaperService.Engine(), SharedPreferences.OnSharedPreferenceChangeListener {
-        private val mPaint = Paint()
+        private val paint = Paint()
 
-        private var mVisible: Boolean = false
+        private var visible: Boolean = false
         private var hasCenteredImages: Boolean = false
         private var hasLoadedImages: Boolean = false
-        private val mPrefs: SharedPreferences
-        private var mPreferencesChanged: Boolean = false
+        private val prefs: SharedPreferences
+        private var preferencesChanged: Boolean = false
 
-        private var mNyanDroid: NyanDroid? = null
-        private var mRainbow: Rainbow? = null
-        private var mStars: Stars? = null
+        private var nyanDroid: NyanDroid? = null
+        private var rainbow: Rainbow? = null
+        private var stars: Stars? = null
 
-        private var mDroidImage: String? = null
-        private var mRainbowImage: String? = null
-        private var mStarImage: String? = null
+        private var droidImage: String? = null
+        private var rainbowImage: String? = null
+        private var starImage: String? = null
 
-        private var mAnimationSpeed: Int = 0
-        private var mSizeMod: Int = 0
-        private var mMaxDim: Int = 0
+        private var animationSpeed: Int = 0
+        private var sizeMod: Int = 0
+        private var maxDim: Int = 0
 
 
         private var frameCount: Int = 0
 
-        private val mDrawFrame = Runnable { drawFrame() }
+        private val drawFrame = Runnable { drawFrame() }
 
-        private var mShowDroid: Boolean = false
-        private var mShowRainbow: Boolean = false
-        private var mShowStars: Boolean = false
+        private var showDroid: Boolean = false
+        private var showRainbow: Boolean = false
+        private var showStars: Boolean = false
 
         init {
-            mPaint.color = -0x1
-            mPrefs = this@NyanPaper.getSharedPreferences(SHARED_PREFS_NAME, 0)
-            mPrefs.registerOnSharedPreferenceChangeListener(this)
-            onSharedPreferenceChanged(mPrefs, null)
+            paint.color = -0x1
+            prefs = this@NyanPaper.getSharedPreferences(SHARED_PREFS_NAME, 0)
+            prefs.registerOnSharedPreferenceChangeListener(this)
+            onSharedPreferenceChanged(prefs, null)
             setupPrefs()
         }
 
@@ -63,33 +63,33 @@ class NyanPaper : WallpaperService() {
                                                key: String?) {
             Log.d(TAG, "prefs changed")
             setupPrefs()
-            mPreferencesChanged = true
+            preferencesChanged = true
         }
 
         private fun setupPrefs() {
-            mDroidImage = mPrefs.getString("droid_image", "nyanwich")
-            mRainbowImage = mPrefs.getString("rainbow_image", "rainbow")
-            mStarImage = mPrefs.getString("star_image", "white")
-            mSizeMod = mPrefs.getInt("size_mod", 5)
-            mAnimationSpeed = mPrefs.getInt("animation_speed", 3)
+            droidImage = prefs.getString("droid_image", "nyanwich")
+            rainbowImage = prefs.getString("rainbow_image", "rainbow")
+            starImage = prefs.getString("star_image", "white")
+            sizeMod = prefs.getInt("size_mod", 5)
+            animationSpeed = prefs.getInt("animation_speed", 3)
 
-            mShowDroid = "none" != mDroidImage
-            mShowRainbow = "none" != mRainbowImage
-            mShowStars = "none" != mStarImage
+            showDroid = "none" != droidImage
+            showRainbow = "none" != rainbowImage
+            showStars = "none" != starImage
         }
 
         override fun onDestroy() {
             super.onDestroy()
-            mDroidHandler.removeCallbacks(mDrawFrame)
+            droidHandler.removeCallbacks(drawFrame)
         }
 
 
         override fun onVisibilityChanged(visible: Boolean) {
-            mVisible = visible
+            this.visible = visible
             if (visible) {
                 drawFrame()
             } else {
-                mDroidHandler.removeCallbacks(mDrawFrame)
+                droidHandler.removeCallbacks(drawFrame)
             }
         }
 
@@ -98,7 +98,7 @@ class NyanPaper : WallpaperService() {
             super.onSurfaceChanged(holder, format, width, height)
             mWidth = width
             hasCenteredImages = false
-            mPreferencesChanged = true
+            preferencesChanged = true
         }
 
         private fun setupAnimations() {
@@ -106,19 +106,19 @@ class NyanPaper : WallpaperService() {
             object : AsyncTask<Void?, Void?, Void?>() {
                 override fun doInBackground(vararg params: Void?): Void? {
                     val c = applicationContext
-                    mMaxDim = 64 * mSizeMod
+                    maxDim = 64 * sizeMod
                     val width = c.resources.displayMetrics.widthPixels
-                    mMaxDim = if (mMaxDim < width) mMaxDim else width - 64
-                    mNyanDroid = NyanDroid(c, mMaxDim, mPaint, mDroidImage!!)
+                    maxDim = if (maxDim < width) maxDim else width - 64
+                    nyanDroid = NyanDroid(c, maxDim, paint, droidImage!!)
 
                     // initialize Rainbow
-                    mMaxDim = (mNyanDroid!!.frameHeight * .4).toInt()
-                    mRainbow = Rainbow(c, mMaxDim, mPaint, mRainbowImage!!)
+                    maxDim = (nyanDroid!!.frameHeight * .4).toInt()
+                    rainbow = Rainbow(c, maxDim, paint, rainbowImage!!)
 
                     // remember offset for when drawing rainbows
-                    mRainbow!!.setOffset(mNyanDroid!!.frameWidth / 2 - mRainbow!!.frameWidth)
+                    rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
 
-                    mStars = Stars(c, mMaxDim, mPaint, mStarImage!!, mAnimationSpeed)
+                    stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
                     return null
                 }
 
@@ -132,8 +132,8 @@ class NyanPaper : WallpaperService() {
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             super.onSurfaceDestroyed(holder)
-            mVisible = false
-            mDroidHandler.removeCallbacks(mDrawFrame)
+            visible = false
+            droidHandler.removeCallbacks(drawFrame)
         }
 
         /**
@@ -142,9 +142,9 @@ class NyanPaper : WallpaperService() {
         private fun drawFrame() {
             val holder = surfaceHolder
 
-            if (mPreferencesChanged) {
+            if (preferencesChanged) {
                 setupAnimations()
-                mPreferencesChanged = false
+                preferencesChanged = false
                 //must reset centers
                 hasCenteredImages = false
             }
@@ -156,28 +156,28 @@ class NyanPaper : WallpaperService() {
                     frameCount++
                     if (c != null && hasLoadedImages) {
                         if (!hasCenteredImages) {
-                            mRainbow!!.setCenter(c.width / 2,
+                            rainbow!!.setCenter(c.width / 2,
                                     c.height / 2)
-                            mNyanDroid!!.setCenter(c.width / 2,
+                            nyanDroid!!.setCenter(c.width / 2,
                                     c.height / 2)
                             hasCenteredImages = true
                         }
 
                         c.drawColor(ContextCompat.getColor(this@NyanPaper, R.color.nyanblue))
 
-                        if (mShowStars) {
-                            mStars!!.draw(c)
+                        if (showStars) {
+                            stars!!.draw(c)
                         }
 
                         // This is ugly and dumb
                         val animateFrame = frameCount == 3
 
-                        if (mShowRainbow) {
-                            mRainbow!!.draw(c, animateFrame)
+                        if (showRainbow) {
+                            rainbow!!.draw(c, animateFrame)
                         }
 
-                        if (mShowDroid) {
-                            mNyanDroid!!.draw(c, animateFrame)
+                        if (showDroid) {
+                            nyanDroid!!.draw(c, animateFrame)
                         }
 
                     }
@@ -189,10 +189,10 @@ class NyanPaper : WallpaperService() {
             }
 
             // Reschedule the next redraw
-            mDroidHandler.removeCallbacks(mDrawFrame)
-            if (mVisible) {
+            droidHandler.removeCallbacks(drawFrame)
+            if (visible) {
                 // approx 30 fps
-                mDroidHandler.postDelayed(mDrawFrame, (1000 / 30).toLong())
+                droidHandler.postDelayed(drawFrame, (1000 / 30).toLong())
             }
         }
     }

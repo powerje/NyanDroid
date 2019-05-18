@@ -19,18 +19,18 @@ class NyanDroid
         /** Context NyanDroid is being drawn in.  */
         context: Context, maxDim: Int,
         /** Paint with which to draw.  */
-        private val mPaint: Paint, private val mDroid: String) {
+        private val paint: Paint, private val droid: String) {
     /** NyanDroid frames.  */
-    private val mFrames = ArrayList<Bitmap>()
+    private val frames = ArrayList<Bitmap>()
 
     /** Current y offset.  */
     private var yOffset: Int = 0
     /** True iff NyanDroid is moving upwards  */
-    private var mMovingUp: Boolean = false
+    private var isMovingUp: Boolean = false
     /** Center x coordinate.  */
-    private var mCenterX: Int = 0
+    private var centerX: Int = 0
     /** Center y coordinate.  */
-    private var mCenterY: Int = 0
+    private var centerY: Int = 0
     /** Current frame NyanDroid is in.  */
     private var currentFrame: Int = 0
 
@@ -40,94 +40,94 @@ class NyanDroid
      * @return the height of an individual frame.
      */
     val frameHeight: Int
-        get() = if (isBlank) 256 else mFrames[0].height
+        get() = if (isBlank) 256 else frames[0].height
 
     /**
      * @return the width of an individual frame.
      */
     val frameWidth: Int
-        get() = if (isBlank) 256 else mFrames[0].width
+        get() = if (isBlank) 256 else frames[0].width
 
     init {
         var maxDim = maxDim
         var repeatingFrame: Bitmap
 
-        when (mDroid) {
+        when (droid) {
             "droidtv" -> {
                 repeatingFrame = NyanUtils.scaleWithRatio(context,
                         R.drawable.superman_gtv0, maxDim)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
                 repeatingFrame = NyanUtils.scaleWithRatio(context,
                         R.drawable.superman_gtv1, maxDim)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
             }
             "ics_egg" -> {
                 // hack because image sizes are different
                 maxDim += 20
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid00, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid01, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid02, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid03, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid04, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid05, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid06, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid07, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid08, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid09, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid10, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.nyandroid11, maxDim))
             }
-            "tardis" -> mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.tardis,
+            "tardis" -> frames.add(NyanUtils.scaleWithRatio(context, R.drawable.tardis,
                     maxDim))
             "grump" -> {
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_0, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_1, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_2, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_3, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_4, maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_5, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_0, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_1, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_2, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_3, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_4, maxDim))
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.grump_frame_5, maxDim))
             }
             "nyanwich" -> {
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame0,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame0,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame1,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame1,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame2,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame2,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame3,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame3,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context,
+                frames.add(NyanUtils.scaleWithRatio(context,
                         R.drawable.superman0, maxDim))
 
                 repeatingFrame = NyanUtils.scaleWithRatio(context,
                         R.drawable.superman1, maxDim)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
-                mFrames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
+                frames.add(repeatingFrame)
 
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame4,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame4,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame5,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame5,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame6,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame6,
                         maxDim))
-                mFrames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame7,
+                frames.add(NyanUtils.scaleWithRatio(context, R.drawable.frame7,
                         maxDim))
             }
             else -> // Setting up to return some default values so
@@ -147,24 +147,24 @@ class NyanDroid
      */
     fun draw(c: Canvas, animate: Boolean) {
         synchronized(this) {
-            val toDraw = mFrames[currentFrame]
-            c.drawBitmap(toDraw, (mCenterX - toDraw.width / 2).toFloat(),
-                    (mCenterY - toDraw.height / 2 + yOffset).toFloat(), mPaint)
+            val toDraw = frames[currentFrame]
+            c.drawBitmap(toDraw, (centerX - toDraw.width / 2).toFloat(),
+                    (centerY - toDraw.height / 2 + yOffset).toFloat(), paint)
             if (animate) {
-                currentFrame = if (currentFrame == mFrames.size - 1)
+                currentFrame = if (currentFrame == frames.size - 1)
                     0
                 else
                     currentFrame + 1
 
-                if (mDroid != "ics_egg") {
-                    if (mMovingUp) {
+                if (droid != "ics_egg") {
+                    if (isMovingUp) {
                         yOffset += 3
                         if (yOffset > 2)
-                            mMovingUp = false
+                            isMovingUp = false
                     } else {
                         yOffset -= 3
                         if (yOffset < -2)
-                            mMovingUp = true
+                            isMovingUp = true
                     }
                 }
             }
@@ -180,14 +180,14 @@ class NyanDroid
      * center y coordinate
      */
     fun setCenter(x: Int, y: Int) {
-        mCenterX = x
-        mCenterY = y
+        centerX = x
+        centerY = y
     }
 
     fun recycle() {
         synchronized(this) {
             isBlank = true
-            for (b in mFrames) {
+            for (b in frames) {
                 b.recycle()
             }
         }

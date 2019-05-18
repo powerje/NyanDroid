@@ -11,16 +11,14 @@ import android.view.Window
 import java.io.IOException
 
 class NyanActivity : Activity() {
-    private var mRoot: NyanView? = null
-    private var mPlayer: MediaPlayer? = null
+    private var root: NyanView? = null
+    private var player: MediaPlayer? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-            requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
-            actionBar!!.setBackgroundDrawable(null)
-        }
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
+        actionBar!!.setBackgroundDrawable(null)
     }
 
     public override fun onResume() {
@@ -31,27 +29,27 @@ class NyanActivity : Activity() {
         val w = metrics.widthPixels
         val largest = if (h > w) h else w
 
-        mRoot = NyanView(this, largest)
-        setContentView(mRoot)
+        root = NyanView(this, largest)
+        setContentView(root)
 
-        if (mPlayer == null) {
-            mPlayer = MediaPlayer.create(this, R.raw.dyan_loop)
-            mPlayer!!.isLooping = true
+        if (player == null) {
+            player = MediaPlayer.create(this, R.raw.dyan_loop)
+            player!!.isLooping = true
         } else {
-            mPlayer!!.start()
+            player!!.start()
         }
 
-        mPlayer!!.setScreenOnWhilePlaying(true)
+        player!!.setScreenOnWhilePlaying(true)
 
         try {
-            mPlayer!!.prepare()
+            player!!.prepare()
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        mPlayer!!.setOnPreparedListener { mPlayer!!.start() }
+        player!!.setOnPreparedListener { player!!.start() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -69,19 +67,19 @@ class NyanActivity : Activity() {
 
     public override fun onPause() {
         super.onPause()
-        mPlayer!!.pause()
+        player!!.pause()
     }
 
     public override fun onStop() {
         super.onStop()
-        mRoot!!.cancel()
-        mRoot = null
+        root!!.cancel()
+        root = null
         System.gc()
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-        mRoot = null
+        root = null
     }
 
 }

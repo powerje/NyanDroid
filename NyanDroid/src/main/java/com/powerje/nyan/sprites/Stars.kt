@@ -10,11 +10,11 @@ import com.powerje.nyan.R
 import java.util.ArrayList
 import java.util.Random
 
-class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: String, private val mSpeed: Int) {
+class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: String, internal val speed: Int) {
 
-    private val mLargeStars: ArrayList<Bitmap>
-    private val mMediumStars: ArrayList<Bitmap>
-    private val mSmallStars: ArrayList<Bitmap>
+    private val largeStars: ArrayList<Bitmap>
+    private val mediumStars: ArrayList<Bitmap>
+    private val smallStars: ArrayList<Bitmap>
 
     private val stars = ArrayList<Star>()
 
@@ -62,26 +62,26 @@ class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: St
         }
 
         // Add a little bit of crowd control for slow speeds
-        if (mSpeed < 4)
-            MAX_NEW_STARS = mSpeed
+        if (speed < 4)
+            MAX_NEW_STARS = speed
 
         mNumberOfFrames = drawables.size
 
-        mLargeStars = ArrayList()
+        largeStars = ArrayList()
         for (i in drawables.indices) {
-            mLargeStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
+            largeStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
                     maxDim / (dimMod + 1)))
         }
 
-        mMediumStars = ArrayList()
+        mediumStars = ArrayList()
         for (i in drawables.indices) {
-            mMediumStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
+            mediumStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
                     maxDim / (dimMod + 2)))
         }
 
-        mSmallStars = ArrayList()
+        smallStars = ArrayList()
         for (i in drawables.indices) {
-            mSmallStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
+            smallStars.add(NyanUtils.scaleWithRatio(mContext, drawables[i],
                     maxDim / (dimMod + 3)))
         }
     }
@@ -106,22 +106,22 @@ class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: St
                 when (mRandom.nextInt(3)) {
                     0 -> {
                         s.speed = 10
-                        s.width = mLargeStars[0].width
-                        s.stars = mLargeStars
+                        s.width = largeStars[0].width
+                        s.stars = largeStars
                     }
                     1 -> {
                         s.speed = 5
-                        s.width = mMediumStars[0].width
-                        s.stars = mMediumStars
+                        s.width = mediumStars[0].width
+                        s.stars = mediumStars
                     }
                     else -> {
                         s.speed = 1
-                        s.width = mSmallStars[0].width
-                        s.stars = mSmallStars
+                        s.width = smallStars[0].width
+                        s.stars = smallStars
                     }
                 }
 
-                s.speed += mSpeed * 5
+                s.speed += speed * 5
 
                 stars.add(s)
                 newStars++
@@ -130,7 +130,7 @@ class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: St
             var i = 0
             while (i < stars.size) {
                 val s = stars[i]
-                c.drawBitmap(s.stars!![s.frame], s.x.toFloat(), s.y.toFloat(), mPaint)
+                c.drawBitmap(s.stars!![s.frame], s.x.toFloat(), s.y.toFloat(), paint)
                 s.frame++
                 s.frame %= mNumberOfFrames
                 if (reverse) {
@@ -160,9 +160,9 @@ class Stars(mContext: Context, maxDim: Int, private val mPaint: Paint, image: St
     fun recycle() {
         synchronized(this) {
             isBlank = true
-            recycleBitmapsInList(mLargeStars)
-            recycleBitmapsInList(mMediumStars)
-            recycleBitmapsInList(mSmallStars)
+            recycleBitmapsInList(largeStars)
+            recycleBitmapsInList(mediumStars)
+            recycleBitmapsInList(smallStars)
         }
     }
 
