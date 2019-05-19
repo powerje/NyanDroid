@@ -59,8 +59,8 @@ class NyanActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        player?.let {
-            it.setOnPreparedListener {
+        player?.run {
+            setOnPreparedListener {
                 it.start()
             }
         }

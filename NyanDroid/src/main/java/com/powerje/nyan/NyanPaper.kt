@@ -188,7 +188,7 @@ class NyanPaper : WallpaperService() {
             droidHandler.removeCallbacks(drawFrame)
             if (visible) {
                 // approx 30 fps
-                droidHandler.postDelayed(drawFrame, (1000 / 30).toLong())
+                droidHandler.postDelayed(drawFrame, (1000 / 60).toLong())
             }
         }
     }

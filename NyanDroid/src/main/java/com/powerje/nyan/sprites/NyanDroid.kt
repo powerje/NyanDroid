@@ -143,7 +143,7 @@ class NyanDroid
      */
     fun draw(c: Canvas, animate: Boolean) {
         if (isBlank) return
-        
+
         val toDraw = frames[currentFrame]
         c.drawBitmap(toDraw, (centerX - toDraw.width / 2).toFloat(),
                 (centerY - toDraw.height / 2 + yOffset).toFloat(), paint)

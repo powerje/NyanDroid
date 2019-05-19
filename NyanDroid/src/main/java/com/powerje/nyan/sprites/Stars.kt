@@ -15,26 +15,24 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
     private val largeStars: ArrayList<Bitmap>
     private val mediumStars: ArrayList<Bitmap>
     private val smallStars: ArrayList<Bitmap>
-
     private val stars = ArrayList<Star>()
 
-    private val mRandom = Random()
+    private val random = Random()
     private var reverse = false
     private var isBlank = false
 
     private val whiteDrawables = intArrayOf(R.drawable.star0, R.drawable.star1, R.drawable.star2, R.drawable.star3, R.drawable.star4, R.drawable.star5, R.drawable.star6, R.drawable.star7, R.drawable.star8, R.drawable.star9)
-
     private val yellowDrawables = intArrayOf(R.drawable.yellow_star0, R.drawable.yellow_star1, R.drawable.yellow_star2, R.drawable.yellow_star3, R.drawable.yellow_star4, R.drawable.yellow_star5, R.drawable.yellow_star6, R.drawable.yellow_star7, R.drawable.yellow_star8, R.drawable.yellow_star9)
-
     private val noDrawable = intArrayOf(R.drawable.no)
-
     private val icsDrawables = intArrayOf(R.drawable.nyandroid00, R.drawable.nyandroid01, R.drawable.nyandroid02, R.drawable.nyandroid03, R.drawable.nyandroid04, R.drawable.nyandroid05, R.drawable.nyandroid06, R.drawable.nyandroid07, R.drawable.nyandroid08, R.drawable.nyandroid09, R.drawable.nyandroid10, R.drawable.nyandroid11)
 
-    private val mNumberOfFrames: Int
+    private val NUMBER_OF_FRAMES: Int
+    private val MAX_TOTAL_STARS: Int
+    private val WEIGHTED_NEW_STAR_COUNT = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 5)
 
     internal class Star {
-        var x: Int = 0
-        var y: Int = 0
+        var x: Float = 0f
+        var y: Float = 0f
         var frame: Int = 0
         var speed: Int = 0
         var width: Int = 0
@@ -46,26 +44,31 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
 
         var dimMod = 1
         when (image) {
-            "white" -> drawables = whiteDrawables
-            "yellow" -> drawables = yellowDrawables
+            "white" -> {
+                drawables = whiteDrawables
+                MAX_TOTAL_STARS = 100
+            }
+            "yellow" -> {
+                drawables = yellowDrawables
+                MAX_TOTAL_STARS = 100
+            }
             "no" -> {
                 drawables = noDrawable
-                // The 'no' can be overwhelming
-                MAX_NEW_STARS = 1
+                MAX_TOTAL_STARS = 60
             }
-            else -> { //if (image.equals("ics_egg")) {
+            "ics_egg" -> {
                 drawables = icsDrawables
                 reverse = true
-                MAX_NEW_STARS = 1
                 dimMod = 0
+                MAX_TOTAL_STARS = 40
+            }
+            else -> {
+                drawables = intArrayOf()
+                MAX_TOTAL_STARS = 0
             }
         }
 
-        // Add a little bit of crowd control for slow speeds
-        if (speed < 4)
-            MAX_NEW_STARS = speed
-
-        mNumberOfFrames = drawables.size
+        NUMBER_OF_FRAMES = drawables.size
 
         largeStars = ArrayList()
         for (i in drawables.indices) {
@@ -89,20 +92,21 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
     fun draw(c: Canvas) {
         if (isBlank) return
 
-        var newStars = 0
-        // create some arbitrary number of stars up to a given max
-        while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
+        val newStarCount = WEIGHTED_NEW_STAR_COUNT.random()
+        for (i in 0..newStarCount) {
+            if (stars.count() >= MAX_TOTAL_STARS) break
+
             // create new star
             val s = Star()
             if (reverse) {
-                s.x = -40
+                s.x = -40f
             } else {
-                s.x = c.width
+                s.x = c.width.toFloat()
             }
-            s.y = mRandom.nextInt(c.height)
-            s.frame = mRandom.nextInt(mNumberOfFrames)
+            s.y = random.nextInt(c.height).toFloat()
+            s.frame = random.nextInt(NUMBER_OF_FRAMES)
 
-            when (mRandom.nextInt(3)) {
+            when (random.nextInt(3)) {
                 0 -> {
                     s.speed = 10
                     s.width = largeStars[0].width
@@ -123,15 +127,14 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             s.speed += speed * 5
 
             stars.add(s)
-            newStars++
         }
 
         var i = 0
         while (i < stars.size) {
             val s = stars[i]
-            c.drawBitmap(s.stars!![s.frame], s.x.toFloat(), s.y.toFloat(), paint)
+            c.drawBitmap(s.stars!![s.frame], s.x, s.y, paint)
             s.frame++
-            s.frame %= mNumberOfFrames
+            s.frame %= NUMBER_OF_FRAMES
             if (reverse) {
                 s.x += s.speed
                 if (s.x > c.width) {
@@ -149,7 +152,4 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         }
     }
 
-    companion object {
-        private var MAX_NEW_STARS = 5
-    }
 }
