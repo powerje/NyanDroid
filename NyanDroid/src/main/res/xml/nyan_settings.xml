@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="@string/shared_preferences_name"
     android:title="@string/nyan_settings_title">
 
     <PreferenceCategory android:title="Images">
 
         <ListPreference
-            android:summary="%s"
             android:defaultValue="ics_egg"
             android:entries="@array/nyan_shapenames"
             android:entryValues="@array/nyan_shapeprefix"
             android:key="droid_image"
+            android:summary="%s"
             android:title="@string/nyan_image_title" />
 
         <ListPreference
