@@ -93,7 +93,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
         droidImage = prefs!!.getString("droid_image", "nyanwich")
         rainbowImage = prefs!!.getString("rainbow_image", "rainbow")
         starImage = prefs!!.getString("star_image", "white")
-        sizeMod = prefs!!.getInt("size_mod", 5)
+        sizeMod = prefs!!.getInt("size_mod", 5) + 1
         animationSpeed = prefs!!.getInt("animation_speed", 3)
         showDroid = "none" != droidImage
         showRainbow = "none" != rainbowImage

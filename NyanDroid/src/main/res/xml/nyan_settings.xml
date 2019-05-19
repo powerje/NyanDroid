@@ -6,11 +6,11 @@
     <PreferenceCategory android:title="Images">
 
         <ListPreference
+            android:summary="%s"
             android:defaultValue="ics_egg"
             android:entries="@array/nyan_shapenames"
             android:entryValues="@array/nyan_shapeprefix"
             android:key="droid_image"
-            android:summary="@string/nyan_image_summary"
             android:title="@string/nyan_image_title" />
 
         <ListPreference
@@ -18,7 +18,7 @@
             android:entries="@array/rainbow_shapenames"
             android:entryValues="@array/rainbow_shapeprefixes"
             android:key="rainbow_image"
-            android:summary="@string/rainbow_image_summary"
+            android:summary="%s"
             android:title="@string/rainbow_image_title" />
 
         <ListPreference
@@ -26,7 +26,7 @@
             android:entries="@array/star_shapenames"
             android:entryValues="@array/star_shapeprefixes"
             android:key="star_image"
-            android:summary="@string/star_image_summary"
+            android:summary="%s"
             android:title="@string/star_image_title" />
 
     </PreferenceCategory>
@@ -36,7 +36,7 @@
         <SeekBarPreference
             android:defaultValue="3"
             android:key="animation_speed"
-            android:max="10"
+            android:max="9"
             android:summary="Adjust animation speed"
             android:title="Starfield speed" />
 
@@ -47,7 +47,7 @@
         <SeekBarPreference
             android:defaultValue="2"
             android:key="size_mod"
-            android:max="10"
+            android:max="9"
             android:summary="Adjust image size"
             android:title="Image size" />
 

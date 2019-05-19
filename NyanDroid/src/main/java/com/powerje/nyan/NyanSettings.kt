@@ -3,6 +3,7 @@ package com.powerje.nyan
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 
 class NyanSettingsActivity : AppCompatActivity() {
