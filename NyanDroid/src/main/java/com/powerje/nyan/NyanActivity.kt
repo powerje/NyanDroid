@@ -1,36 +1,43 @@
 package com.powerje.nyan
 
-import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.Window
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 import java.io.IOException
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 
-class NyanActivity : Activity() {
-    private var root: NyanView? = null
+
+class NyanActivity : AppCompatActivity() {
+    private var nyanView: NyanView? = null
     private var player: MediaPlayer? = null
+    private var toolbar: Toolbar? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
-        actionBar!!.setBackgroundDrawable(null)
+        setContentView(R.layout.nyan_activity)
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar!!) { v, insets ->
+            val params = v.layoutParams as ViewGroup.MarginLayoutParams
+            params.topMargin = insets.systemWindowInsetTop
+            insets.consumeSystemWindowInsets()
+        }
     }
 
     public override fun onResume() {
         super.onResume()
-        // scale by whichever is larger, width or height
-        val metrics = this.resources.displayMetrics
-        val h = metrics.heightPixels
-        val w = metrics.widthPixels
-        val largest = if (h > w) h else w
-
-        root = NyanView(this, largest)
-        setContentView(root)
 
         if (player == null) {
             player = MediaPlayer.create(this, R.raw.dyan_loop)
@@ -49,7 +56,14 @@ class NyanActivity : Activity() {
             e.printStackTrace()
         }
 
-        player!!.setOnPreparedListener { player!!.start() }
+        player?.let {
+            it.setOnPreparedListener {
+                it.start()
+            }
+        }
+
+        nyanView = findViewById(R.id.nyan_view)
+        nyanView!!.start()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -67,19 +81,21 @@ class NyanActivity : Activity() {
 
     public override fun onPause() {
         super.onPause()
-        player!!.pause()
+        player?.pause()
+        nyanView?.cancel()
+        nyanView = null
     }
 
     public override fun onStop() {
         super.onStop()
-        root!!.cancel()
-        root = null
+        nyanView?.cancel()
+        nyanView = null
         System.gc()
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-        root = null
+        nyanView = null
     }
 
 }

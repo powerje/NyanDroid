@@ -6,9 +6,12 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.AsyncTask
+import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import androidx.core.content.ContextCompat
 
 import com.powerje.nyan.sprites.NyanDroid
@@ -19,10 +22,11 @@ import com.powerje.nyan.sprites.Stars
  * NyanView draws NyanDroid flying through space distributing Ice Cream Nyanwich.
  * @author powerj
  */
-class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(context), SurfaceHolder.Callback, OnSharedPreferenceChangeListener {
-
+class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : SurfaceView(context, attrs, defStyle), SurfaceHolder.Callback, OnSharedPreferenceChangeListener {
     /** Paint to draw with.  */
-    private val paint = Paint()
+    private val paint = Paint().apply {
+        color = -0x1
+    }
     /** True iff dimensions have been setup.  */
     private var hasSetup: Boolean = false
 
@@ -48,12 +52,7 @@ class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(contex
 
     private var thread: DrawingThread? = null
 
-    init {
-        paint.color = -0x1
-        init(scaleBy)
-    }
-
-    private fun init(scaleBy: Int) {
+    fun start() {
         prefs = context.getSharedPreferences(NyanPaper.SHARED_PREFS_NAME, 0)
         prefs?.let {
             it.registerOnSharedPreferenceChangeListener(this)
@@ -67,10 +66,10 @@ class NyanView(internal val context: Context, scaleBy: Int) : SurfaceView(contex
     }
 
     fun cancel() {
-        thread!!.setRunning(false)
-        nyanDroid!!.recycle()
-        stars!!.recycle()
-        rainbow!!.recycle()
+        thread?.setRunning(false)
+        nyanDroid?.recycle()
+        stars?.recycle()
+        rainbow?.recycle()
     }
 
     private fun setupAnimations() {
