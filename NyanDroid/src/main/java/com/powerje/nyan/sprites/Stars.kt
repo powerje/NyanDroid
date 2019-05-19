@@ -151,21 +151,6 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         }
     }
 
-    private fun recycleBitmapsInList(l: List<Bitmap>) {
-        for (b in l) {
-            b.recycle()
-        }
-    }
-
-    fun recycle() {
-        synchronized(this) {
-            isBlank = true
-            recycleBitmapsInList(largeStars)
-            recycleBitmapsInList(mediumStars)
-            recycleBitmapsInList(smallStars)
-        }
-    }
-
     companion object {
         private var MAX_NEW_STARS = 5
     }

@@ -179,13 +179,4 @@ class NyanDroid
         centerX = x
         centerY = y
     }
-
-    fun recycle() {
-        synchronized(this) {
-            isBlank = true
-            for (b in frames) {
-                b.recycle()
-            }
-        }
-    }
 }

@@ -79,13 +79,4 @@ class Rainbow(mContext: Context, maxDim: Int, private val paint: Paint, image: S
         centerX = x
         centerY = y
     }
-
-    fun recycle() {
-        synchronized(this) {
-            isBlank = true
-            for (b in frames) {
-                b.recycle()
-            }
-        }
-    }
 }

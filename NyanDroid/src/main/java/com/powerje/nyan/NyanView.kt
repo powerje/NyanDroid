@@ -67,9 +67,6 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
     fun cancel() {
         thread?.setRunning(false)
-        nyanDroid?.recycle()
-        stars?.recycle()
-        rainbow?.recycle()
     }
 
     private fun setupAnimations() {
