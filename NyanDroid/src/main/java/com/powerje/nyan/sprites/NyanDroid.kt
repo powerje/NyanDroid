@@ -142,26 +142,26 @@ class NyanDroid
      * move to next frame after drawing.
      */
     fun draw(c: Canvas, animate: Boolean) {
-        synchronized(this) {
-            val toDraw = frames[currentFrame]
-            c.drawBitmap(toDraw, (centerX - toDraw.width / 2).toFloat(),
-                    (centerY - toDraw.height / 2 + yOffset).toFloat(), paint)
-            if (animate) {
-                currentFrame = if (currentFrame == frames.size - 1)
-                    0
-                else
-                    currentFrame + 1
+        if (isBlank) return
+        
+        val toDraw = frames[currentFrame]
+        c.drawBitmap(toDraw, (centerX - toDraw.width / 2).toFloat(),
+                (centerY - toDraw.height / 2 + yOffset).toFloat(), paint)
+        if (animate) {
+            currentFrame = if (currentFrame == frames.size - 1)
+                0
+            else
+                currentFrame + 1
 
-                if (droid != "ics_egg") {
-                    if (isMovingUp) {
-                        yOffset += 3
-                        if (yOffset > 2)
-                            isMovingUp = false
-                    } else {
-                        yOffset -= 3
-                        if (yOffset < -2)
-                            isMovingUp = true
-                    }
+            if (droid != "ics_egg") {
+                if (isMovingUp) {
+                    yOffset += 3
+                    if (yOffset > 2)
+                        isMovingUp = false
+                } else {
+                    yOffset -= 3
+                    if (yOffset < -2)
+                        isMovingUp = true
                 }
             }
         }

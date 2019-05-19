@@ -87,67 +87,65 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
     }
 
     fun draw(c: Canvas) {
-        synchronized(this) {
-            if (isBlank) return
+        if (isBlank) return
 
-            var newStars = 0
-            // create some arbitrary number of stars up to a given max
-            while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
-                // create new star
-                val s = Star()
-                if (reverse) {
-                    s.x = -40
-                } else {
-                    s.x = c.width
+        var newStars = 0
+        // create some arbitrary number of stars up to a given max
+        while (mRandom.nextInt(100) > 40 && newStars < MAX_NEW_STARS) {
+            // create new star
+            val s = Star()
+            if (reverse) {
+                s.x = -40
+            } else {
+                s.x = c.width
+            }
+            s.y = mRandom.nextInt(c.height)
+            s.frame = mRandom.nextInt(mNumberOfFrames)
+
+            when (mRandom.nextInt(3)) {
+                0 -> {
+                    s.speed = 10
+                    s.width = largeStars[0].width
+                    s.stars = largeStars
                 }
-                s.y = mRandom.nextInt(c.height)
-                s.frame = mRandom.nextInt(mNumberOfFrames)
-
-                when (mRandom.nextInt(3)) {
-                    0 -> {
-                        s.speed = 10
-                        s.width = largeStars[0].width
-                        s.stars = largeStars
-                    }
-                    1 -> {
-                        s.speed = 5
-                        s.width = mediumStars[0].width
-                        s.stars = mediumStars
-                    }
-                    else -> {
-                        s.speed = 1
-                        s.width = smallStars[0].width
-                        s.stars = smallStars
-                    }
+                1 -> {
+                    s.speed = 5
+                    s.width = mediumStars[0].width
+                    s.stars = mediumStars
                 }
-
-                s.speed += speed * 5
-
-                stars.add(s)
-                newStars++
+                else -> {
+                    s.speed = 1
+                    s.width = smallStars[0].width
+                    s.stars = smallStars
+                }
             }
 
-            var i = 0
-            while (i < stars.size) {
-                val s = stars[i]
-                c.drawBitmap(s.stars!![s.frame], s.x.toFloat(), s.y.toFloat(), paint)
-                s.frame++
-                s.frame %= mNumberOfFrames
-                if (reverse) {
-                    s.x += s.speed
-                    if (s.x > c.width) {
-                        stars.removeAt(i)
-                        i--
-                    }
-                } else {
-                    s.x -= s.speed
-                    if (s.x < -c.width) {
-                        stars.removeAt(i)
-                        i--
-                    }
+            s.speed += speed * 5
+
+            stars.add(s)
+            newStars++
+        }
+
+        var i = 0
+        while (i < stars.size) {
+            val s = stars[i]
+            c.drawBitmap(s.stars!![s.frame], s.x.toFloat(), s.y.toFloat(), paint)
+            s.frame++
+            s.frame %= mNumberOfFrames
+            if (reverse) {
+                s.x += s.speed
+                if (s.x > c.width) {
+                    stars.removeAt(i)
+                    i--
                 }
-                i++
+            } else {
+                s.x -= s.speed
+                if (s.x < -c.width) {
+                    stars.removeAt(i)
+                    i--
+                }
             }
+            i++
         }
     }
 

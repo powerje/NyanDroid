@@ -52,22 +52,19 @@ class Rainbow(mContext: Context, maxDim: Int, private val paint: Paint, image: S
     }
 
     fun draw(c: Canvas, animate: Boolean) {
-        synchronized(this) {
-            if (isBlank) return
+        if (isBlank) return
 
+        val numberRainbowsFromCenter = c.width / 2 / rainbowWidth
 
-            val numberRainbowsFromCenter = c.width / 2 / rainbowWidth
-
-            for (i in 0 until numberRainbowsFromCenter) {
-                val toDraw = frames[(currentFrame + i % 2) % 2]
-                c.drawBitmap(toDraw, (centerX - toDraw.width / 2 - offset
-                        - i * rainbowWidth).toFloat(), (centerY - toDraw.height / 2).toFloat(),
-                        paint)
-            }
-            if (animate) {
-                currentFrame++
-                currentFrame %= 2
-            }
+        for (i in 0 until numberRainbowsFromCenter) {
+            val toDraw = frames[(currentFrame + i % 2) % 2]
+            c.drawBitmap(toDraw, (centerX - toDraw.width / 2 - offset
+                    - i * rainbowWidth).toFloat(), (centerY - toDraw.height / 2).toFloat(),
+                    paint)
+        }
+        if (animate) {
+            currentFrame++
+            currentFrame %= 2
         }
     }
 
