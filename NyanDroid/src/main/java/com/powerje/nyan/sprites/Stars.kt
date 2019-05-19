@@ -11,11 +11,11 @@ import java.util.ArrayList
 import java.util.Random
 
 class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: String, internal val speed: Int) {
-
     private val largeStars: ArrayList<Bitmap>
     private val mediumStars: ArrayList<Bitmap>
     private val smallStars: ArrayList<Bitmap>
     private val stars = ArrayList<Star>()
+    private val reusableStars = ArrayList<Star>()
 
     private val random = Random()
     private var reverse = false
@@ -36,7 +36,7 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         var frame: Int = 0
         var speed: Int = 0
         var width: Int = 0
-        var stars: ArrayList<Bitmap>? = null
+        var frames: ArrayList<Bitmap>? = null
     }
 
     init {
@@ -97,34 +97,38 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             if (stars.count() >= MAX_TOTAL_STARS) break
 
             // create new star
-            val s = Star()
+            val s: Star
+            if (reusableStars.isNotEmpty()) {
+                s = reusableStars.removeAt(0)
+            } else {
+                s = Star()
+                s.frame = random.nextInt(NUMBER_OF_FRAMES)
+                when (random.nextInt(3)) {
+                    0 -> {
+                        s.speed = 10
+                        s.width = largeStars[0].width
+                        s.frames = largeStars
+                    }
+                    1 -> {
+                        s.speed = 5
+                        s.width = mediumStars[0].width
+                        s.frames = mediumStars
+                    }
+                    else -> {
+                        s.speed = 1
+                        s.width = smallStars[0].width
+                        s.frames = smallStars
+                    }
+                }
+                s.speed += speed * 5
+            }
+
             if (reverse) {
                 s.x = -40f
             } else {
                 s.x = c.width.toFloat()
             }
             s.y = random.nextInt(c.height).toFloat()
-            s.frame = random.nextInt(NUMBER_OF_FRAMES)
-
-            when (random.nextInt(3)) {
-                0 -> {
-                    s.speed = 10
-                    s.width = largeStars[0].width
-                    s.stars = largeStars
-                }
-                1 -> {
-                    s.speed = 5
-                    s.width = mediumStars[0].width
-                    s.stars = mediumStars
-                }
-                else -> {
-                    s.speed = 1
-                    s.width = smallStars[0].width
-                    s.stars = smallStars
-                }
-            }
-
-            s.speed += speed * 5
 
             stars.add(s)
         }
@@ -132,19 +136,21 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         var i = 0
         while (i < stars.size) {
             val s = stars[i]
-            c.drawBitmap(s.stars!![s.frame], s.x, s.y, paint)
+            c.drawBitmap(s.frames!![s.frame], s.x, s.y, paint)
             s.frame++
             s.frame %= NUMBER_OF_FRAMES
             if (reverse) {
                 s.x += s.speed
                 if (s.x > c.width) {
-                    stars.removeAt(i)
+                    val star = stars.removeAt(i)
+                    addReusableStarIfSpaceAvailable(star)
                     i--
                 }
             } else {
                 s.x -= s.speed
                 if (s.x < -c.width) {
-                    stars.removeAt(i)
+                    val star = stars.removeAt(i)
+                    addReusableStarIfSpaceAvailable(star)
                     i--
                 }
             }
@@ -152,4 +158,9 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         }
     }
 
+    private fun addReusableStarIfSpaceAvailable(star: Star) {
+       if (reusableStars.count() < MAX_TOTAL_STARS) {
+           reusableStars.add(star)
+       }
+    }
 }

@@ -15,7 +15,6 @@ import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class NyanPaper : WallpaperService() {
     private val droidHandler = Handler()
@@ -25,7 +24,9 @@ class NyanPaper : WallpaperService() {
     }
 
     internal inner class NyanEngine : WallpaperService.Engine(), SharedPreferences.OnSharedPreferenceChangeListener {
-        private val paint = Paint()
+        private val paint = Paint().apply {
+            color = -0x1
+        }
 
         private var visible: Boolean = false
         private var hasCenteredImages: Boolean = false
@@ -45,7 +46,6 @@ class NyanPaper : WallpaperService() {
         private var sizeMod: Int = 0
         private var maxDim: Int = 0
 
-
         private var frameCount: Int = 0
 
         private val drawFrame = Runnable { drawFrame() }
@@ -55,15 +55,13 @@ class NyanPaper : WallpaperService() {
         private var showStars: Boolean = false
 
         init {
-            paint.color = -0x1
             prefs = this@NyanPaper.getSharedPreferences(SHARED_PREFS_NAME, 0)
             prefs.registerOnSharedPreferenceChangeListener(this)
             onSharedPreferenceChanged(prefs, null)
             setupPrefs()
         }
 
-        override fun onSharedPreferenceChanged(prefs: SharedPreferences,
-                                               key: String?) {
+        override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
             Log.d(TAG, "prefs changed")
             setupPrefs()
             preferencesChanged = true
@@ -86,7 +84,6 @@ class NyanPaper : WallpaperService() {
             droidHandler.removeCallbacks(drawFrame)
         }
 
-
         override fun onVisibilityChanged(visible: Boolean) {
             this.visible = visible
             if (visible) {
@@ -96,10 +93,8 @@ class NyanPaper : WallpaperService() {
             }
         }
 
-        override fun onSurfaceChanged(holder: SurfaceHolder, format: Int,
-                                      width: Int, height: Int) {
+        override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             super.onSurfaceChanged(holder, format, width, height)
-            mWidth = width
             hasCenteredImages = false
             preferencesChanged = true
         }
@@ -119,7 +114,6 @@ class NyanPaper : WallpaperService() {
 
                 // remember offset for when drawing rainbows
                 rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
-
                 stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
 
                 hasLoadedImages = true
@@ -141,7 +135,6 @@ class NyanPaper : WallpaperService() {
             if (preferencesChanged) {
                 setupAnimations()
                 preferencesChanged = false
-                //must reset centers
                 hasCenteredImages = false
             }
 
@@ -180,14 +173,12 @@ class NyanPaper : WallpaperService() {
                     frameCount %= 3
                 }
             } finally {
-                if (c != null)
-                    holder.unlockCanvasAndPost(c)
+                if (c != null) holder.unlockCanvasAndPost(c)
             }
 
             // Reschedule the next redraw
             droidHandler.removeCallbacks(drawFrame)
             if (visible) {
-                // approx 30 fps
                 droidHandler.postDelayed(drawFrame, (1000 / 60).toLong())
             }
         }
@@ -196,6 +187,5 @@ class NyanPaper : WallpaperService() {
     companion object {
         const val SHARED_PREFS_NAME = "nyandroidsettings"
         private const val TAG = "NyanPaper"
-        private var mWidth: Int = 0
     }
 }
