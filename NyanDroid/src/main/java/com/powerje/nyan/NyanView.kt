@@ -146,17 +146,15 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 stars!!.draw(c)
             }
 
-            val animateFrame = frameCount == 3
-
             if (showRainbow) {
-                rainbow!!.draw(c, animateFrame)
+                rainbow!!.draw(c, frameCount == 6)
             }
 
             if (showDroid) {
-                nyanDroid!!.draw(c, animateFrame)
+                nyanDroid!!.draw(c, frameCount % 3 == 0)
             }
         }
-        frameCount %= 3
+        frameCount %= 6
     }
 
     class DrawingThread(private val myThreadSurfaceHolder: SurfaceHolder, private val myThreadSurfaceView: NyanView) : Thread() {

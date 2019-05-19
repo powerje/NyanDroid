@@ -158,19 +158,15 @@ class NyanPaper : WallpaperService() {
                             stars!!.draw(c)
                         }
 
-                        // This is ugly and dumb
-                        val animateFrame = frameCount == 3
-
                         if (showRainbow) {
-                            rainbow!!.draw(c, animateFrame)
+                            rainbow!!.draw(c, frameCount == 6)
                         }
 
                         if (showDroid) {
-                            nyanDroid!!.draw(c, animateFrame)
+                            nyanDroid!!.draw(c, frameCount % 3 == 0)
                         }
-
                     }
-                    frameCount %= 3
+                    frameCount %= 6
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c)
