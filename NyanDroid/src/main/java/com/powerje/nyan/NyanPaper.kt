@@ -55,7 +55,7 @@ class NyanPaper : WallpaperService() {
         private var showStars: Boolean = false
 
         init {
-            prefs = this@NyanPaper.getSharedPreferences(SHARED_PREFS_NAME, 0)
+            prefs = this@NyanPaper.getSharedPreferences(getString(R.string.shared_preferences_name), 0)
             prefs.registerOnSharedPreferenceChangeListener(this)
             onSharedPreferenceChanged(prefs, null)
             setupPrefs()
@@ -181,7 +181,6 @@ class NyanPaper : WallpaperService() {
     }
 
     companion object {
-        const val SHARED_PREFS_NAME = "nyandroidsettings"
         private const val TAG = "NyanPaper"
     }
 }

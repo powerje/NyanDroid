@@ -5,13 +5,10 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
 import androidx.core.content.ContextCompat
 
 import com.powerje.nyan.sprites.NyanDroid
@@ -53,7 +50,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private var thread: DrawingThread? = null
 
     fun start() {
-        prefs = context.getSharedPreferences(NyanPaper.SHARED_PREFS_NAME, 0)
+        prefs = context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0)
         prefs?.let {
             it.registerOnSharedPreferenceChangeListener(this)
             onSharedPreferenceChanged(it, null)

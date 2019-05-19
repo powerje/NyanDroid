@@ -1,29 +1,43 @@
 package com.powerje.nyan
 
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceFragmentCompat
 
-class NyanSettings : PreferenceActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class NyanSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
-
-        preferenceManager.sharedPreferencesName = NyanPaper.SHARED_PREFS_NAME
-        addPreferencesFromResource(R.xml.nyan_settings)
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(
-                this)
-
-        val c = Color.argb(200, 50, 50, 50)
-        listView.setBackgroundColor(c)
-        listView.cacheColorHint = c
+        setContentView(R.layout.nyan_settings)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
-    override fun onDestroy() {
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(
-                this)
-        super.onDestroy()
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+}
+
+class NyanSettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.nyan_settings, rootKey)
+        preferenceManager.sharedPreferencesName = getString(R.string.shared_preferences_name)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+
+    }
+
+    override fun onPause() {
+        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        super.onPause()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences,

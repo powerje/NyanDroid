@@ -44,7 +44,7 @@
         </activity>
 
         <activity
-            android:name=".NyanSettings"
+            android:name=".NyanSettingsActivity"
             android:exported="true"
             android:label="NyanDroid Settings"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

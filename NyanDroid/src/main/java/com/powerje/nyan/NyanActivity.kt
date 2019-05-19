@@ -73,7 +73,7 @@ class NyanActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_settings -> startActivity(Intent(this@NyanActivity, NyanSettings::class.java))
+            R.id.menu_settings -> startActivity(Intent(this@NyanActivity, NyanSettingsActivity::class.java))
         }
         return true
     }
