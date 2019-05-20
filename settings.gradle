@@ -1,1 +1,1 @@
-include ':NyanDroid', ':SeekBarPreference'
+include ':NyanDroid'
