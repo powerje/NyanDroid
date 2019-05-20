@@ -170,7 +170,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         myThreadSurfaceView.drawFrame(c)
                     }
 
-                    sleep((1000 / 120).toLong())
+                    sleep((1000 / 30).toLong())
 
                 } catch (e: InterruptedException) {
                     e.printStackTrace()

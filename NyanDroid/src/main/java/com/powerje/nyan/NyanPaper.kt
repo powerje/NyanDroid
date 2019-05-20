@@ -175,7 +175,7 @@ class NyanPaper : WallpaperService() {
             // Reschedule the next redraw
             droidHandler.removeCallbacks(drawFrame)
             if (visible) {
-                droidHandler.postDelayed(drawFrame, (1000 / 60).toLong())
+                droidHandler.postDelayed(drawFrame, (1000 / 30).toLong())
             }
         }
     }
