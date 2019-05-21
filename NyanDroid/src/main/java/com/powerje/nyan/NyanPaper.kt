@@ -155,7 +155,7 @@ class NyanPaper : WallpaperService() {
                         c.drawColor(ContextCompat.getColor(this@NyanPaper, R.color.nyanblue))
 
                         if (showStars) {
-                            stars!!.draw(c)
+                            stars!!.draw(c, frameCount % 3 == 0)
                         }
 
                         if (showRainbow) {
@@ -166,7 +166,7 @@ class NyanPaper : WallpaperService() {
                             nyanDroid!!.draw(c, frameCount % 3 == 0)
                         }
                     }
-                    frameCount %= 6
+                    frameCount %= 12
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c)
@@ -175,7 +175,7 @@ class NyanPaper : WallpaperService() {
             // Reschedule the next redraw
             droidHandler.removeCallbacks(drawFrame)
             if (visible) {
-                droidHandler.postDelayed(drawFrame, (1000 / 30).toLong())
+                droidHandler.postDelayed(drawFrame, (1000 / 120).toLong())
             }
         }
     }
