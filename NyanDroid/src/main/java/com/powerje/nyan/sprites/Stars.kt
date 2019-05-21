@@ -28,8 +28,8 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
     private val icsDrawableFrames = intArrayOf(R.drawable.nyandroid00, R.drawable.nyandroid01, R.drawable.nyandroid02, R.drawable.nyandroid03, R.drawable.nyandroid04, R.drawable.nyandroid05, R.drawable.nyandroid06, R.drawable.nyandroid07, R.drawable.nyandroid08, R.drawable.nyandroid09, R.drawable.nyandroid10, R.drawable.nyandroid11)
 
     private val NUMBER_OF_FRAMES: Int
-    private val MAX_TOTAL_STARS = 100
-    private val WEIGHTED_NEW_STAR_COUNT = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 5, 15)
+    private var MAX_TOTAL_STARS: Int
+    private val WEIGHTED_NEW_STAR_COUNT = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2)
 
     internal class Star {
         var x: Float = 0f
@@ -47,20 +47,25 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         when (image) {
             "white" -> {
                 drawables = whiteDrawableFrames
+                MAX_TOTAL_STARS = 100
             }
             "yellow" -> {
                 drawables = yellowDrawableFrames
+                MAX_TOTAL_STARS = 100
             }
             "no" -> {
                 drawables = noDrawableFrame
+                MAX_TOTAL_STARS = 30
             }
             "ics_egg" -> {
                 drawables = icsDrawableFrames
                 reverse = true
                 dimMod = 0
+                MAX_TOTAL_STARS = 250
             }
             else -> {
                 drawables = intArrayOf()
+                MAX_TOTAL_STARS = 0
             }
         }
         NUMBER_OF_FRAMES = drawables.size
@@ -96,22 +101,23 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             if (animate) {
                 s.frame++
                 s.frame %= NUMBER_OF_FRAMES
-                if (reverse) {
-                    s.x += s.speed
-                    if (s.x > c.width) {
-                        val star = stars.removeAt(i)
-                        addReusableStarIfSpaceAvailable(star)
-                        i--
-                    }
-                } else {
-                    s.x -= s.speed
-                    if (s.x < -c.width) {
-                        val star = stars.removeAt(i)
-                        addReusableStarIfSpaceAvailable(star)
-                        i--
-                    }
+            }
+            if (reverse) {
+                s.x += s.speed
+                if (s.x > c.width) {
+                    val star = stars.removeAt(i)
+                    addReusableStarIfSpaceAvailable(star)
+                    i--
+                }
+            } else {
+                s.x -= s.speed
+                if (s.x < -c.width) {
+                    val star = stars.removeAt(i)
+                    addReusableStarIfSpaceAvailable(star)
+                    i--
                 }
             }
+
             i++
         }
     }
@@ -129,12 +135,12 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
                 s.frame = random.nextInt(NUMBER_OF_FRAMES)
                 when (random.nextInt(3)) {
                     0 -> {
-                        s.speed = 10
+                        s.speed = random.nextInt(10)
                         s.width = largeStarFrames[0].width
                         s.frames = largeStarFrames
                     }
                     1 -> {
-                        s.speed = 5
+                        s.speed = random.nextInt(5)
                         s.width = mediumStarFrames[0].width
                         s.frames = mediumStarFrames
                     }
@@ -148,7 +154,7 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             }
 
             if (reverse) {
-                s.x = -40f
+                s.x = -(s.frames!![s.frame].width).toFloat()
             } else {
                 s.x = c.width.toFloat()
             }

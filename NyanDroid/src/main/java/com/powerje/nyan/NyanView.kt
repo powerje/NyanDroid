@@ -140,7 +140,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
             c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
             if (showStars) {
-                stars!!.draw(c, frameCount % 2 == 0)
+                stars!!.draw(c, frameCount % 3 == 0)
             }
 
             if (showRainbow) {
@@ -151,7 +151,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 nyanDroid!!.draw(c, frameCount % 3 == 0)
             }
         }
-        frameCount %= 6
+        frameCount %= 12
     }
 
     class DrawingThread(private val myThreadSurfaceHolder: SurfaceHolder, private val myThreadSurfaceView: NyanView) : Thread() {
@@ -170,7 +170,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                         myThreadSurfaceView.drawFrame(c)
                     }
 
-                    sleep((1000 / 30).toLong())
+                    sleep((1000 / 120).toLong())
 
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
