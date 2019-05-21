@@ -57,7 +57,7 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             }
             "no" -> {
                 drawables = noDrawableFrame
-                MAX_TOTAL_STARS = 30
+                MAX_TOTAL_STARS = 50
             }
             "ics_egg" -> {
                 drawables = icsDrawableFrames
