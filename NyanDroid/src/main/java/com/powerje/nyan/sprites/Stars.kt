@@ -31,6 +31,8 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
     private var MAX_TOTAL_STARS: Int
     private val WEIGHTED_NEW_STAR_COUNT = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2)
 
+    private var randomlyPlaceStars = true
+
     internal class Star {
         var x: Float = 0f
         var y: Float = 0f
@@ -84,13 +86,22 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         for (i in drawables.indices) {
             smallStarFrames.add(NyanUtils.scaleWithRatio(mContext, drawables[i], maxDim / (dimMod + 3)))
         }
+
+        (0..random.nextInt(MAX_TOTAL_STARS)).forEach {
+            stars.add(generateStar())
+        }
     }
 
     fun draw(c: Canvas, animate: Boolean) {
         if (isBlank) return
+        if (animate) { addStars(c) }
 
-        if (animate) {
-            addStars(c)
+        if (randomlyPlaceStars) {
+            for (s in stars) {
+                s.x = random.nextInt(c.width).toFloat()
+                s.y = random.nextInt(c.height).toFloat()
+            }
+            randomlyPlaceStars = false
         }
 
         var i = 0
@@ -131,26 +142,7 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             if (reusableStars.isNotEmpty()) {
                 s = reusableStars.removeAt(0)
             } else {
-                s = Star()
-                s.frame = random.nextInt(NUMBER_OF_FRAMES)
-                when (random.nextInt(3)) {
-                    0 -> {
-                        s.speed = random.nextInt(10)
-                        s.width = largeStarFrames[0].width
-                        s.frames = largeStarFrames
-                    }
-                    1 -> {
-                        s.speed = random.nextInt(5)
-                        s.width = mediumStarFrames[0].width
-                        s.frames = mediumStarFrames
-                    }
-                    else -> {
-                        s.speed = 1
-                        s.width = smallStarFrames[0].width
-                        s.frames = smallStarFrames
-                    }
-                }
-                s.speed += speed * 5
+                s = generateStar()
             }
 
             if (reverse) {
@@ -162,6 +154,30 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
 
             stars.add(s)
         }
+    }
+
+    private fun generateStar(): Star {
+        val s = Star()
+        s.frame = random.nextInt(NUMBER_OF_FRAMES)
+        when (random.nextInt(3)) {
+            0 -> {
+                s.speed = random.nextInt(10)
+                s.width = largeStarFrames[0].width
+                s.frames = largeStarFrames
+            }
+            1 -> {
+                s.speed = random.nextInt(5)
+                s.width = mediumStarFrames[0].width
+                s.frames = mediumStarFrames
+            }
+            else -> {
+                s.speed = 1
+                s.width = smallStarFrames[0].width
+                s.frames = smallStarFrames
+            }
+        }
+        s.speed += speed * 5
+        return s
     }
 
     private fun addReusableStarIfSpaceAvailable(star: Star) {
