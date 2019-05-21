@@ -140,7 +140,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
             c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
             if (showStars) {
-                stars!!.draw(c)
+                stars!!.draw(c, frameCount % 2 == 0)
             }
 
             if (showRainbow) {

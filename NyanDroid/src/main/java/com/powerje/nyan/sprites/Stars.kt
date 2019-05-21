@@ -81,9 +81,42 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
         }
     }
 
-    fun draw(c: Canvas) {
+    fun draw(c: Canvas, animate: Boolean) {
         if (isBlank) return
 
+        if (animate) {
+            addStars(c)
+        }
+
+        var i = 0
+        while (i < stars.size) {
+            val s = stars[i]
+            c.drawBitmap(s.frames!![s.frame], s.x, s.y, paint)
+
+            if (animate) {
+                s.frame++
+                s.frame %= NUMBER_OF_FRAMES
+                if (reverse) {
+                    s.x += s.speed
+                    if (s.x > c.width) {
+                        val star = stars.removeAt(i)
+                        addReusableStarIfSpaceAvailable(star)
+                        i--
+                    }
+                } else {
+                    s.x -= s.speed
+                    if (s.x < -c.width) {
+                        val star = stars.removeAt(i)
+                        addReusableStarIfSpaceAvailable(star)
+                        i--
+                    }
+                }
+            }
+            i++
+        }
+    }
+
+    private fun addStars(c: Canvas) {
         val newStarCount = WEIGHTED_NEW_STAR_COUNT.random()
         for (i in 0..newStarCount) {
             if (stars.count() >= MAX_TOTAL_STARS) break
@@ -122,30 +155,6 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             s.y = random.nextInt(c.height).toFloat()
 
             stars.add(s)
-        }
-
-        var i = 0
-        while (i < stars.size) {
-            val s = stars[i]
-            c.drawBitmap(s.frames!![s.frame], s.x, s.y, paint)
-            s.frame++
-            s.frame %= NUMBER_OF_FRAMES
-            if (reverse) {
-                s.x += s.speed
-                if (s.x > c.width) {
-                    val star = stars.removeAt(i)
-                    addReusableStarIfSpaceAvailable(star)
-                    i--
-                }
-            } else {
-                s.x -= s.speed
-                if (s.x < -c.width) {
-                    val star = stars.removeAt(i)
-                    addReusableStarIfSpaceAvailable(star)
-                    i--
-                }
-            }
-            i++
         }
     }
 
