@@ -110,7 +110,6 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        Log.d("NyanView", "Surface destroyed")
         var retry = true
         thread!!.setRunning(false)
         while (retry) {
@@ -144,14 +143,14 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             }
 
             if (showRainbow) {
-                rainbow!!.draw(c, frameCount == 6)
+                rainbow!!.draw(c, frameCount % 12 == 0)
             }
 
             if (showDroid) {
-                nyanDroid!!.draw(c, frameCount % 3 == 0)
+                nyanDroid!!.draw(c, frameCount % 6 == 0)
             }
         }
-        frameCount %= 12
+        frameCount %= 24
     }
 
     class DrawingThread(private val myThreadSurfaceHolder: SurfaceHolder, private val myThreadSurfaceView: NyanView) : Thread() {
@@ -169,9 +168,6 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     synchronized(myThreadSurfaceHolder) {
                         myThreadSurfaceView.drawFrame(c)
                     }
-
-                    sleep((1000 / 120).toLong())
-
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 } finally {

@@ -159,14 +159,14 @@ class NyanPaper : WallpaperService() {
                         }
 
                         if (showRainbow) {
-                            rainbow!!.draw(c, frameCount == 6)
+                            rainbow!!.draw(c, frameCount % 12 == 0)
                         }
 
                         if (showDroid) {
-                            nyanDroid!!.draw(c, frameCount % 3 == 0)
+                            nyanDroid!!.draw(c, frameCount % 6 == 0)
                         }
                     }
-                    frameCount %= 12
+                    frameCount %= 24
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c)
@@ -175,7 +175,7 @@ class NyanPaper : WallpaperService() {
             // Reschedule the next redraw
             droidHandler.removeCallbacks(drawFrame)
             if (visible) {
-                droidHandler.postDelayed(drawFrame, (1000 / 120).toLong())
+                droidHandler.postDelayed(drawFrame, 0)
             }
         }
     }
