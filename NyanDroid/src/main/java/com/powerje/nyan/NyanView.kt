@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * NyanView draws NyanDroid flying through space distributing Ice Cream Nyanwich.
@@ -45,8 +48,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private var stars: Stars? = null
     /** Count number of elapsed frames to time animations.  */
     private var frameCount: Int = 0
-
-    private var thread: DrawingThread? = null
+    private var drawingJob: Job? = null
 
     fun start() {
         prefs = context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0)
@@ -62,7 +64,7 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     fun cancel() {
-        thread?.setRunning(false)
+        drawingJob?.cancel()
     }
 
     private fun setupAnimations() {
@@ -100,81 +102,60 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        thread = DrawingThread(getHolder(), this)
-        thread!!.setRunning(true)
-        thread!!.start()
+        drawingJob?.cancel()
+        drawingJob = GlobalScope.launch {
+            while (true) {
+                drawFrame()
+            }
+        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        var retry = true
-        thread!!.setRunning(false)
-        while (retry) {
-            try {
-                thread!!.join()
-                retry = false
-            } catch (e: InterruptedException) {
-            }
-        }
+        drawingJob?.cancel()
     }
 
-    fun drawFrame(c: Canvas?) {
-        frameCount++
-        if (c != null) {
-            if (preferencesChanged) {
-                setupAnimations()
-                preferencesChanged = false
-                //must reset centers
-                hasSetup = false
-            }
-
-            if (!hasSetup) {
-                rainbow!!.setCenter(c.width / 2, c.height / 2)
-                nyanDroid!!.setCenter(c.width / 2, c.height / 2)
-                hasSetup = true
-            }
-
-            c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
-            if (showStars) {
-                stars!!.draw(c, frameCount % 3 == 0)
-            }
-
-            if (showRainbow) {
-                rainbow!!.draw(c, frameCount % 12 == 0)
-            }
-
-            if (showDroid) {
-                nyanDroid!!.draw(c, frameCount % 6 == 0)
-            }
-        }
-        frameCount %= 24
-    }
-
-    class DrawingThread(private val myThreadSurfaceHolder: SurfaceHolder, private val myThreadSurfaceView: NyanView) : Thread() {
-        private var myThreadRun = false
-
-        fun setRunning(b: Boolean) {
-            myThreadRun = b
+    fun drawFrame() {
+        if (preferencesChanged) {
+            setupAnimations()
+            preferencesChanged = false
+            //must reset centers
+            hasSetup = false
         }
 
-        override fun run() {
-            while (myThreadRun) {
-                var c: Canvas? = null
-                try {
-                    c = myThreadSurfaceHolder.lockCanvas(null)
-                    synchronized(myThreadSurfaceHolder) {
-                        myThreadSurfaceView.drawFrame(c)
+        var c: Canvas? = null
+        try {
+            c = holder.lockCanvas(null)
+            synchronized(holder) {
+                frameCount++
+                if (c != null) {
+                    if (!hasSetup) {
+                        rainbow!!.setCenter(c.width / 2, c.height / 2)
+                        nyanDroid!!.setCenter(c.width / 2, c.height / 2)
+                        hasSetup = true
                     }
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                } finally {
-                    if (c != null) {
-                        myThreadSurfaceHolder.unlockCanvasAndPost(c)
+
+                    c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
+                    if (showStars) {
+                        stars!!.draw(c, frameCount % 3 == 0)
+                    }
+
+                    if (showRainbow) {
+                        rainbow!!.draw(c, frameCount % 12 == 0)
+                    }
+
+                    if (showDroid) {
+                        nyanDroid!!.draw(c, frameCount % 6 == 0)
                     }
                 }
+                frameCount %= 24
             }
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        } finally {
+            if (c != null) holder.unlockCanvasAndPost(c)
         }
     }
 }
