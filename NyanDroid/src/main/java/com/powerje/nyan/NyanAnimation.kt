@@ -9,12 +9,8 @@ import androidx.core.content.ContextCompat
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class NyanAnimation(private val sharedPreferences: SharedPreferences, private val context: Context, private val holder: SurfaceHolder) : SharedPreferences.OnSharedPreferenceChangeListener, SurfaceHolder.Callback  {
+class NyanAnimation(private val sharedPreferences: SharedPreferences, private val context: Context, private val holder: SurfaceHolder) : SharedPreferences.OnSharedPreferenceChangeListener, SurfaceHolder.Callback {
     private val paint = Paint().apply {
         color = -0x1
     }
@@ -40,23 +36,17 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
     private var showDroid: Boolean = false
     private var showRainbow: Boolean = false
     private var showStars: Boolean = false
-    private var drawingJob: Job? = null
+    private var thread: DrawingThread? = null
 
     private var visible = false
 
     init {
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         onSharedPreferenceChanged(sharedPreferences, null)
-        setupsharedPreferences()
         holder.addCallback(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        setupsharedPreferences()
-        preferencesChanged = true
-    }
-
-    private fun setupsharedPreferences() {
         droidImage = sharedPreferences.getString("droid_image", "nyanwich")
         rainbowImage = sharedPreferences.getString("rainbow_image", "rainbow")
         starImage = sharedPreferences.getString("star_image", "white")
@@ -66,20 +56,21 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
         showDroid = "none" != droidImage
         showRainbow = "none" != rainbowImage
         showStars = "none" != starImage
+        preferencesChanged = true
     }
 
     fun onVisibilityChanged(visible: Boolean) {
         this.visible = visible
-        drawingJob?.cancel()
-        drawingJob = GlobalScope.launch {
-            while (visible) {
-                drawFrame()
-            }
+        if (visible) {
+            thread = DrawingThread(this)
+            thread!!.setRunning(true)
+            thread!!.start()
+        } else {
+            thread?.setRunning(false)
         }
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        onVisibilityChanged(true)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -89,6 +80,15 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         onVisibilityChanged(false)
+        var retry = true
+        thread!!.setRunning(false)
+        while (retry) {
+            try {
+                thread!!.join()
+                retry = false
+            } catch (e: InterruptedException) {
+            }
+        }
     }
 
     private fun setupAnimations() {
@@ -111,48 +111,65 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
         hasLoadedImages = true
     }
 
-    private fun drawFrame() {
+    private fun drawFrame(c: Canvas?) {
         if (!visible) return
 
-        var c: Canvas? = null
-        try {
-            c = holder.lockCanvas()
-            synchronized(holder) {
+        if (preferencesChanged) {
+            setupAnimations()
+            preferencesChanged = false
+            hasCenteredImages = false
+        }
 
-                if (preferencesChanged) {
-                    setupAnimations()
-                    preferencesChanged = false
-                    hasCenteredImages = false
-                }
-
-                frameCount++
-                if (c != null && hasLoadedImages) {
-                    if (!hasCenteredImages) {
-                        rainbow!!.setCenter(c.width / 2,
-                                c.height / 2)
-                        nyanDroid!!.setCenter(c.width / 2,
-                                c.height / 2)
-                        hasCenteredImages = true
-                    }
-
-                    c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
-
-                    if (showStars) {
-                        stars!!.draw(c, frameCount % 3 == 0)
-                    }
-
-                    if (showRainbow) {
-                        rainbow!!.draw(c, frameCount % 12 == 0)
-                    }
-
-                    if (showDroid) {
-                        nyanDroid!!.draw(c, frameCount % 6 == 0)
-                    }
-                }
-                frameCount %= 24
+        frameCount++
+        if (c != null && hasLoadedImages) {
+            if (!hasCenteredImages) {
+                rainbow!!.setCenter(c.width / 2,
+                        c.height / 2)
+                nyanDroid!!.setCenter(c.width / 2,
+                        c.height / 2)
+                hasCenteredImages = true
             }
-        } finally {
-            if (c != null) holder.unlockCanvasAndPost(c)
+
+            c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
+
+            if (showStars) {
+                stars!!.draw(c, frameCount % 3 == 0)
+            }
+
+            if (showRainbow) {
+                rainbow!!.draw(c, frameCount % 12 == 0)
+            }
+
+            if (showDroid) {
+                nyanDroid!!.draw(c, frameCount % 6 == 0)
+            }
+        }
+        frameCount %= 24
+    }
+
+    class DrawingThread(private val nyanAnimation: NyanAnimation) : Thread() {
+        private var myThreadRun = false
+
+        fun setRunning(b: Boolean) {
+            myThreadRun = b
+        }
+
+        override fun run() {
+            while (myThreadRun) {
+                var c: Canvas? = null
+                try {
+                    c = nyanAnimation.holder.lockCanvas(null)
+                    synchronized(nyanAnimation.holder) {
+                        nyanAnimation.drawFrame(c)
+                    }
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                } finally {
+                    if (c != null) {
+                        nyanAnimation.holder.unlockCanvasAndPost(c)
+                    }
+                }
+            }
         }
     }
 }

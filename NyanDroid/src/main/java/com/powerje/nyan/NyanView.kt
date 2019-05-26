@@ -9,14 +9,14 @@ import android.view.SurfaceView
  * @author powerj
  */
 class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : SurfaceView(context, attrs, defStyle) {
-    private val nyanAnimation = NyanAnimation(context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0), getContext(), holder)
+    private var nyanAnimation: NyanAnimation? = null
 
     fun start() {
-        nyanAnimation.onVisibilityChanged(true)
+        nyanAnimation = NyanAnimation(context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0), getContext(), holder)
+        nyanAnimation!!.onVisibilityChanged(true)
     }
 
     fun cancel() {
-        nyanAnimation.onVisibilityChanged(false)
+        nyanAnimation?.onVisibilityChanged(false)
     }
-
 }
