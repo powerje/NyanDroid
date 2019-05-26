@@ -3,7 +3,6 @@ package com.powerje.nyan
 import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.Handler
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
@@ -11,10 +10,10 @@ import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class NyanPaper : WallpaperService() {
-    private val droidHandler = Handler()
 
     override fun onCreateEngine(): Engine {
         return NyanEngine()
@@ -25,7 +24,6 @@ class NyanPaper : WallpaperService() {
             color = -0x1
         }
 
-        private var visible: Boolean = false
         private var hasCenteredImages: Boolean = false
         private var hasLoadedImages: Boolean = false
         private val prefs: SharedPreferences
@@ -45,11 +43,10 @@ class NyanPaper : WallpaperService() {
 
         private var frameCount: Int = 0
 
-        private val drawFrame = Runnable { drawFrame() }
-
         private var showDroid: Boolean = false
         private var showRainbow: Boolean = false
         private var showStars: Boolean = false
+        private var drawingJob: Job? = null
 
         init {
             prefs = this@NyanPaper.getSharedPreferences(getString(R.string.shared_preferences_name), 0)
@@ -75,17 +72,13 @@ class NyanPaper : WallpaperService() {
             showStars = "none" != starImage
         }
 
-        override fun onDestroy() {
-            super.onDestroy()
-            droidHandler.removeCallbacks(drawFrame)
-        }
-
         override fun onVisibilityChanged(visible: Boolean) {
-            this.visible = visible
-            if (visible) {
-                drawFrame()
-            } else {
-                droidHandler.removeCallbacks(drawFrame)
+            drawingJob?.cancel()
+
+            drawingJob = GlobalScope.launch {
+                while (true) {
+                    drawFrame()
+                }
             }
         }
 
@@ -114,12 +107,6 @@ class NyanPaper : WallpaperService() {
 
                 hasLoadedImages = true
             }
-        }
-
-        override fun onSurfaceDestroyed(holder: SurfaceHolder) {
-            super.onSurfaceDestroyed(holder)
-            visible = false
-            droidHandler.removeCallbacks(drawFrame)
         }
 
         /**
@@ -166,12 +153,6 @@ class NyanPaper : WallpaperService() {
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c)
-            }
-
-            // Reschedule the next redraw
-            droidHandler.removeCallbacks(drawFrame)
-            if (visible) {
-                droidHandler.postDelayed(drawFrame, 0)
             }
         }
     }
