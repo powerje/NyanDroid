@@ -1,7 +1,6 @@
 package com.powerje.nyan
 
 import android.service.wallpaper.WallpaperService
-import android.view.SurfaceHolder
 
 class NyanPaper : WallpaperService() {
     override fun onCreateEngine(): Engine {
@@ -13,11 +12,6 @@ class NyanPaper : WallpaperService() {
 
         override fun onVisibilityChanged(visible: Boolean) {
             nyanAnimation.onVisibilityChanged(visible)
-        }
-
-        override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            super.onSurfaceChanged(holder, format, width, height)
-            nyanAnimation.onSurfaceChanged(holder, format, width, height)
         }
     }
 }

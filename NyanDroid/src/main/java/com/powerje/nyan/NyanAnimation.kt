@@ -11,9 +11,10 @@ import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class NyanAnimation(val sharedPreferences: SharedPreferences, val appContext: Context, val holder: SurfaceHolder): SharedPreferences.OnSharedPreferenceChangeListener {
+class NyanAnimation(private val sharedPreferences: SharedPreferences, private val context: Context, private val holder: SurfaceHolder) : SharedPreferences.OnSharedPreferenceChangeListener, SurfaceHolder.Callback  {
     private val paint = Paint().apply {
         color = -0x1
     }
@@ -41,10 +42,13 @@ class NyanAnimation(val sharedPreferences: SharedPreferences, val appContext: Co
     private var showStars: Boolean = false
     private var drawingJob: Job? = null
 
+    private var visible = false
+
     init {
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         onSharedPreferenceChanged(sharedPreferences, null)
         setupsharedPreferences()
+        holder.addCallback(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
@@ -65,54 +69,62 @@ class NyanAnimation(val sharedPreferences: SharedPreferences, val appContext: Co
     }
 
     fun onVisibilityChanged(visible: Boolean) {
+        this.visible = visible
         drawingJob?.cancel()
         drawingJob = GlobalScope.launch {
-            while (true) {
+            while (visible) {
                 drawFrame()
             }
         }
     }
 
-    fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        onVisibilityChanged(true)
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         hasCenteredImages = false
         preferencesChanged = true
     }
 
-    private fun setupAnimations() {
-        hasLoadedImages = false
-        GlobalScope.launch {
-            val c = appContext
-            maxDim = 64 * sizeMod
-            val width = c.resources.displayMetrics.widthPixels
-            maxDim = if (maxDim < width) maxDim else width - 64
-            nyanDroid = NyanDroid(c, maxDim, paint, droidImage!!)
-
-            // initialize Rainbow
-            maxDim = (nyanDroid!!.frameHeight * .4).toInt()
-            rainbow = Rainbow(c, maxDim, paint, rainbowImage!!)
-
-            // remember offset for when drawing rainbows
-            rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
-            stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
-
-            hasLoadedImages = true
-        }
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        onVisibilityChanged(false)
     }
 
-    /**
-     * Draw a single animation frame.
-     */
+    private fun setupAnimations() {
+        hasLoadedImages = false
+
+        val c = context
+        maxDim = 64 * sizeMod
+        val width = c.resources.displayMetrics.widthPixels
+        maxDim = if (maxDim < width) maxDim else width - 64
+        nyanDroid = NyanDroid(c, maxDim, paint, droidImage!!)
+
+        // initialize Rainbow
+        maxDim = (nyanDroid!!.frameHeight * .4).toInt()
+        rainbow = Rainbow(c, maxDim, paint, rainbowImage!!)
+
+        // remember offset for when drawing rainbows
+        rainbow!!.setOffset(nyanDroid!!.frameWidth / 2 - rainbow!!.frameWidth)
+        stars = Stars(c, maxDim, paint, starImage!!, animationSpeed)
+
+        hasLoadedImages = true
+    }
+
     private fun drawFrame() {
-        if (preferencesChanged) {
-            setupAnimations()
-            preferencesChanged = false
-            hasCenteredImages = false
-        }
+        if (!visible) return
 
         var c: Canvas? = null
         try {
             c = holder.lockCanvas()
             synchronized(holder) {
+
+                if (preferencesChanged) {
+                    setupAnimations()
+                    preferencesChanged = false
+                    hasCenteredImages = false
+                }
+
                 frameCount++
                 if (c != null && hasLoadedImages) {
                     if (!hasCenteredImages) {
@@ -123,7 +135,7 @@ class NyanAnimation(val sharedPreferences: SharedPreferences, val appContext: Co
                         hasCenteredImages = true
                     }
 
-                    c.drawColor(ContextCompat.getColor(appContext, R.color.nyanblue))
+                    c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
 
                     if (showStars) {
                         stars!!.draw(c, frameCount % 3 == 0)
