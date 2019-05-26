@@ -5,10 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Handler
 import android.service.wallpaper.WallpaperService
-import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
-
 import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
@@ -61,7 +59,6 @@ class NyanPaper : WallpaperService() {
         }
 
         override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
-            Log.d(TAG, "prefs changed")
             setupPrefs()
             preferencesChanged = true
         }
@@ -179,7 +176,4 @@ class NyanPaper : WallpaperService() {
         }
     }
 
-    companion object {
-        private const val TAG = "NyanPaper"
-    }
 }
