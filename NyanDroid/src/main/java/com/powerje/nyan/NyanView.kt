@@ -12,11 +12,12 @@ class NyanView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private var nyanAnimation: NyanAnimation? = null
 
     fun start() {
-        nyanAnimation = NyanAnimation(context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0), getContext(), holder)
+        nyanAnimation = NyanAnimation(getContext(), holder)
         nyanAnimation!!.onVisibilityChanged(true)
     }
 
     fun cancel() {
         nyanAnimation?.onVisibilityChanged(false)
+        nyanAnimation = null
     }
 }

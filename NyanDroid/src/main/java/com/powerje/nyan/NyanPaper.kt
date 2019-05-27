@@ -8,7 +8,7 @@ class NyanPaper : WallpaperService() {
     }
 
     internal inner class NyanEngine : WallpaperService.Engine() {
-        private val nyanAnimation = NyanAnimation(this@NyanPaper.getSharedPreferences(getString(R.string.shared_preferences_name), 0), applicationContext, surfaceHolder)
+        private val nyanAnimation = NyanAnimation(applicationContext, surfaceHolder)
 
         override fun onVisibilityChanged(visible: Boolean) {
             nyanAnimation.onVisibilityChanged(visible)

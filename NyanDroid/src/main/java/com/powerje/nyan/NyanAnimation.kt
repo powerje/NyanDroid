@@ -10,10 +10,11 @@ import com.powerje.nyan.sprites.NyanDroid
 import com.powerje.nyan.sprites.Rainbow
 import com.powerje.nyan.sprites.Stars
 
-class NyanAnimation(private val sharedPreferences: SharedPreferences, private val context: Context, private val holder: SurfaceHolder) : SharedPreferences.OnSharedPreferenceChangeListener, SurfaceHolder.Callback {
+class NyanAnimation(private val context: Context, private val holder: SurfaceHolder) : SharedPreferences.OnSharedPreferenceChangeListener, SurfaceHolder.Callback {
     private val paint = Paint().apply {
         color = -0x1
     }
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0)
 
     private var hasCenteredImages: Boolean = false
     private var hasLoadedImages: Boolean = false
@@ -43,7 +44,6 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
     init {
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         onSharedPreferenceChanged(sharedPreferences, null)
-        holder.addCallback(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
@@ -62,10 +62,12 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
     fun onVisibilityChanged(visible: Boolean) {
         this.visible = visible
         if (visible) {
+            holder.addCallback(this)
             thread = DrawingThread(this)
             thread!!.setRunning(true)
             thread!!.start()
         } else {
+            holder.removeCallback(this)
             thread?.setRunning(false)
         }
     }
@@ -123,10 +125,8 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
         frameCount++
         if (c != null && hasLoadedImages) {
             if (!hasCenteredImages) {
-                rainbow!!.setCenter(c.width / 2,
-                        c.height / 2)
-                nyanDroid!!.setCenter(c.width / 2,
-                        c.height / 2)
+                rainbow!!.setCenter(c.width / 2, c.height / 2)
+                nyanDroid!!.setCenter(c.width / 2, c.height / 2)
                 hasCenteredImages = true
             }
 
@@ -135,11 +135,9 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
             if (showStars) {
                 stars!!.draw(c, frameCount % 3 == 0)
             }
-
             if (showRainbow) {
                 rainbow!!.draw(c, frameCount % 12 == 0)
             }
-
             if (showDroid) {
                 nyanDroid!!.draw(c, frameCount % 6 == 0)
             }
@@ -147,15 +145,15 @@ class NyanAnimation(private val sharedPreferences: SharedPreferences, private va
         frameCount %= 24
     }
 
-    class DrawingThread(private val nyanAnimation: NyanAnimation) : Thread() {
-        private var myThreadRun = false
+    private class DrawingThread(private val nyanAnimation: NyanAnimation) : Thread() {
+        private var isRunning = false
 
-        fun setRunning(b: Boolean) {
-            myThreadRun = b
+        fun setRunning(running: Boolean) {
+            isRunning = running
         }
 
         override fun run() {
-            while (myThreadRun) {
+            while (isRunning) {
                 var c: Canvas? = null
                 try {
                     c = nyanAnimation.holder.lockCanvas(null)
