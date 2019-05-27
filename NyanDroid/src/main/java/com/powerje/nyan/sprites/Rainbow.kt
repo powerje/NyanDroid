@@ -6,8 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.powerje.nyan.NyanUtils
 import com.powerje.nyan.R
-
-import java.util.ArrayList
+import java.util.*
 
 class Rainbow(mContext: Context, maxDim: Int, private val paint: Paint, image: String) {
     private val frames = ArrayList<Bitmap>()

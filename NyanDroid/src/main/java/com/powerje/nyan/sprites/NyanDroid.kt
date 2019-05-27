@@ -6,8 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.powerje.nyan.NyanUtils
 import com.powerje.nyan.R
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * NyanDroid is a class for drawing an animated nyan droid.

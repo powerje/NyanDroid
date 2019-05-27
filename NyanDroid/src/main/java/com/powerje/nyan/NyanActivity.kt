@@ -8,12 +8,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-
-import java.io.IOException
-import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import java.io.IOException
 
 
 class NyanActivity : AppCompatActivity() {

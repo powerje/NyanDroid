@@ -6,9 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.powerje.nyan.NyanUtils
 import com.powerje.nyan.R
-
-import java.util.ArrayList
-import java.util.Random
+import java.util.*
 
 class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: String, internal val speed: Int) {
     private val largeStarFrames: ArrayList<Bitmap>
