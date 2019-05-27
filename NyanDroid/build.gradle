@@ -16,10 +16,6 @@ android {
         targetSdkVersion 28
         minSdkVersion 19
     }
-    aaptOptions {
-        cruncherEnabled = false
-        useNewCruncher = false
-    }
 
     buildTypes {
         release {
