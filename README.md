@@ -2,7 +2,7 @@
 
 Live wallpaper celebrating Ice Cream Nyanwiches. Available on [Google Play](https://play.google.com/store/apps/details?id=com.powerje.nyan "Nyan Droid on Google Play").
 
-Nyan Droid created by [Daniel Sandler](https://plus.google.com/114592751246503219483/posts "Daniel Sandler on G+").
+Nyan Droid created by [Daniel Sandler](https://twitter.com/dsandler "Daniel Sandler on Twitter").
 
     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     MMMMMMMMMMMMMMMMNNNNMMMNNNNNNNNNNNNNNNNNNMMMNNNNMMMMMMMMMMMMMMMM
@@ -50,4 +50,4 @@ Licensing
 
 Nyan Droid source is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) license.
 
-dyan.mp3 (droid droid dr-dr-droid audio) created by [Jeff Sharkey](https://plus.google.com/112333815159468020407/posts "Jeff Sharkey on G+") and released under the [CC license](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
+dyan.mp3 (droid droid dr-dr-droid audio) created by [Jeff Sharkey](https://twitter.com/jsharkey "Jeff Sharkey on Twitter") and released under the [CC license](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
