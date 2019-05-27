@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         targetSdkVersion 28
-        minSdkVersion 14
+        minSdkVersion 19
     }
     aaptOptions {
         cruncherEnabled = false
