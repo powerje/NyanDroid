@@ -1,0 +1,12 @@
+language: android
+android:
+  components:
+    # The BuildTools version used by your project
+    - build-tools-29.0.0-rc3
+
+    # The SDK version used to compile your project
+    - android-28
+
+script:
+   - ./gradlew assemble
+
