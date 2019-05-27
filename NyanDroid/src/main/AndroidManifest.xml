@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.powerje.nyan"
-    android:versionCode="12"
-    android:versionName="2.0.2">
+    android:versionCode="13"
+    android:versionName="2.0.3">
 
     <uses-sdk tools:overrideLibrary="android.support.v7.appcompat" />
 
