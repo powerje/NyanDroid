@@ -85,19 +85,24 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             smallStarFrames.add(NyanUtils.scaleWithRatio(mContext, drawables[i], maxDim / (dimMod + 3)))
         }
 
-        (0..random.nextInt(MAX_TOTAL_STARS)).forEach {
-            stars.add(generateStar())
+        if (MAX_TOTAL_STARS > 0) {
+            (0..random.nextInt(MAX_TOTAL_STARS)).forEach {
+                stars.add(generateStar())
+            }
         }
     }
 
     fun draw(c: Canvas, animate: Boolean) {
         if (isBlank) return
         if (animate) { addStars(c) }
+        val height = c.height
+        val width = c.width
+        if (height == 0 || width == 0) return
 
         if (randomlyPlaceStars) {
             for (s in stars) {
-                s.x = random.nextInt(c.width).toFloat()
-                s.y = random.nextInt(c.height).toFloat()
+                s.x = random.nextInt(width).toFloat()
+                s.y = random.nextInt(height).toFloat()
             }
             randomlyPlaceStars = false
         }
@@ -113,14 +118,14 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             }
             if (reverse) {
                 s.x += s.speed
-                if (s.x > c.width) {
+                if (s.x > width) {
                     val star = stars.removeAt(i)
                     addReusableStarIfSpaceAvailable(star)
                     i--
                 }
             } else {
                 s.x -= s.speed
-                if (s.x < -c.width) {
+                if (s.x < -width) {
                     val star = stars.removeAt(i)
                     addReusableStarIfSpaceAvailable(star)
                     i--
@@ -148,7 +153,9 @@ class Stars(mContext: Context, maxDim: Int, private val paint: Paint, image: Str
             } else {
                 s.x = c.width.toFloat()
             }
-            s.y = random.nextInt(c.height).toFloat()
+            if (c.height > 0) {
+                s.y = random.nextInt(c.height).toFloat()
+            }
 
             stars.add(s)
         }
