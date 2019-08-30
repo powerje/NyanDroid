@@ -15,7 +15,7 @@ android {
     defaultConfig {
         targetSdkVersion 28
         minSdkVersion 19
-        versionCode = 14
+        versionCode = 15
         applicationId = 'com.powerje.nyan'
         versionName = '2.0.4'
     }
