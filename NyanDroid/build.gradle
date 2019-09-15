@@ -10,11 +10,11 @@ allprojects {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion = 28
 
     defaultConfig {
-        targetSdkVersion 28
-        minSdkVersion 19
+        targetSdkVersion(28)
+        minSdkVersion(19)
         versionCode = 15
         applicationId = "com.powerje.nyan"
         versionName = "2.0.4"
@@ -22,8 +22,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile(
                     "proguard-android-optimize.txt"),
                     "proguard-rules.pro"
