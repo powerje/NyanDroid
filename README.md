@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/powerje/NyanDroid.svg?branch=master)](https://travis-ci.org/powerje/NyanDroid)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-Live wallpaper celebrating Ice Cream Nyanwiches. Available on [Google Play](https://play.google.com/store/apps/details?id=com.powerje.nyan "Nyan Droid on Google Play").
+Live wallpaper celebrating Ice Cream Nyanwiches. Available on [Google Play](https://play.google.com/store/apps/details?id=com.powerje.nyan "NyanDroid on Google Play") and [F-Droid](https://www.f-droid.org/packages/com.powerje.nyan "NyanDroid on F-Droid").
 
-Nyan Droid created by [Daniel Sandler](https://twitter.com/dsandler "Daniel Sandler on Twitter").
+NyanDroid created by [Daniel Sandler](https://twitter.com/dsandler "Daniel Sandler on Twitter").
 
     MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
     MMMMMMMMMMMMMMMMNNNNMMMNNNNNNNNNNNNNNNNNNMMMNNNNMMMMMMMMMMMMMMMM
@@ -49,6 +49,6 @@ Nyan Droid created by [Daniel Sandler](https://twitter.com/dsandler "Daniel Sand
 Licensing
 =========
 
-Nyan Droid source is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) license.
+Nyan Droid source is released under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
 
-dyan.mp3 (droid droid dr-dr-droid audio) created by [Jeff Sharkey](https://twitter.com/jsharkey "Jeff Sharkey on Twitter") and released under the [CC license](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
+[dyan.mp3](https://github.com/powerje/NyanDroid/blob/master/NyanDroid/src/main/res/raw/dyan_loop.mp3) (droid droid dr-dr-droid audio) created by [Jeff Sharkey](https://twitter.com/jsharkey "Jeff Sharkey on Twitter") and released under the [CC license](https://creativecommons.org/licenses/by-nc-sa/3.0).
