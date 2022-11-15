@@ -12,8 +12,8 @@ allprojects {
 }
 
 android {
-    compileSdkVersion(Versions.Build.compileSdkVersion)
 
+    compileSdk = Versions.Build.compileSdkVersion
     defaultConfig {
         targetSdkVersion(Versions.Build.targetSdkVersion)
         minSdkVersion(Versions.Build.minSdkVersion)
