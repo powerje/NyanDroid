@@ -16,6 +16,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <service
+            android:exported="true"
             android:name=".NyanPaper"
             android:enabled="true"
             android:icon="@drawable/icon"
@@ -31,6 +32,7 @@
         </service>
 
         <activity
+            android:exported="true"
             android:name=".NyanActivity"
             android:label="@string/app_name"
             android:theme="@style/Overlay">

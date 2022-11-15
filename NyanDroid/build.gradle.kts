@@ -15,8 +15,8 @@ android {
 
     compileSdk = Versions.Build.compileSdkVersion
     defaultConfig {
-        targetSdkVersion(Versions.Build.targetSdkVersion)
-        minSdkVersion(Versions.Build.minSdkVersion)
+        targetSdk = Versions.Build.targetSdkVersion
+        minSdk = Versions.Build.minSdkVersion
         versionCode = 16
         applicationId = "com.powerje.nyan"
         versionName = "2.0.5"
