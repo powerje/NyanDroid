@@ -17,9 +17,9 @@ android {
     defaultConfig {
         targetSdkVersion(Versions.Build.targetSdkVersion)
         minSdkVersion(Versions.Build.minSdkVersion)
-        versionCode = 15
+        versionCode = 16
         applicationId = "com.powerje.nyan"
-        versionName = "2.0.4"
+        versionName = "2.0.5"
     }
 
     buildTypes {
