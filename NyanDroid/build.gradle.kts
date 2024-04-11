@@ -1,25 +1,23 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 android {
-
-    compileSdk = Versions.Build.compileSdkVersion
+    compileSdk = 34
     defaultConfig {
-        targetSdk = Versions.Build.targetSdkVersion
-        minSdk = Versions.Build.minSdkVersion
-        versionCode = 16
+        targetSdk = 34
+        minSdk = 30
+        versionCode = 17
         applicationId = "com.powerje.nyan"
-        versionName = "2.0.5"
+        versionName = "2.0.6"
     }
 
     buildTypes {
@@ -30,10 +28,15 @@ android {
         }
     }
     namespace = "com.powerje.nyan"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
-    implementation(Libs.Kotlin.standardLibrary)
-    implementation(Libs.AndroidX.appCompat)
-    implementation(Libs.AndroidX.preference)
+    implementation( "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.preference:preference:1.2.1")
 }
