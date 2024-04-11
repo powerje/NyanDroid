@@ -31,13 +31,11 @@ object NyanUtils {
 
     fun scaleWithRatio(c: Context, res: Int, max: Int): Bitmap {
         val opts = BitmapFactory.Options()
-        opts.inPurgeable = true
         opts.inSampleSize = 2
         return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(c.resources, res, opts), max, max, false)
     }
 
     private fun imageResourceToBitmap(c: Context, res: Int, maxDim: Int): Bitmap? {
-        var bmp: Bitmap? = null
         val opts = BitmapFactory.Options()
         opts.inJustDecodeBounds = true
         // compute the smallest size bitmap we need to read
@@ -55,10 +53,8 @@ object NyanUtils {
         }
         // scale and read the data
         opts.inJustDecodeBounds = false
-        opts.inPurgeable = true
         opts.inSampleSize = s
-        bmp = BitmapFactory.decodeResource(c.resources, res, opts)
-        return bmp
+        return BitmapFactory.decodeResource(c.resources, res, opts)
     }
 
 }
