@@ -11,9 +11,9 @@ allprojects {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
-        targetSdk = 34
+        targetSdk = 35
         minSdk = 30
         versionCode = 17
         applicationId = "com.powerje.nyan"
@@ -32,7 +32,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {
