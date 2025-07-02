@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/powerje/NyanDroid.svg?branch=master)](https://travis-ci.org/powerje/NyanDroid)
+[![Android CI](https://github.com/powerje/NyanDroid/workflows/Android%20CI/badge.svg)](https://github.com/powerje/NyanDroid/actions/workflows/android.yml)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Live wallpaper celebrating Ice Cream Nyanwiches. Available on [Google Play](https://play.google.com/store/apps/details?id=com.powerje.nyan "NyanDroid on Google Play") and [F-Droid](https://www.f-droid.org/packages/com.powerje.nyan "NyanDroid on F-Droid").

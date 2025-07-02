@@ -3,6 +3,8 @@ plugins {
     kotlin("android")
 }
 
+// Added GitHub Actions CI workflow for automated builds and testing
+
 allprojects {
     repositories {
         google()
