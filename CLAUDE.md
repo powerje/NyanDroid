@@ -24,7 +24,7 @@ The app uses a custom animation engine that renders sprites to a SurfaceView wit
 
 **Prerequisites**: Ensure Java 17 is installed and `JAVA_HOME` is set correctly:
 ```bash
-export JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Contents/Home
+export JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.18/libexec/openjdk.jdk/Contents/Home
 ```
 
 **Main Build Tasks**:
@@ -47,13 +47,13 @@ export JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Con
 
 ## Project Structure
 
-- **Target SDK**: 35 (Android 15)
+- **Target SDK**: 36 (Android 16)
 - **Min SDK**: 30 (Android 11)
-- **Compile SDK**: 35
-- **Build Tools**: 35.0.0
-- **Gradle**: 8.11.1
-- **Android Gradle Plugin**: 8.9.0
-- **Kotlin**: 1.9.23
+- **Compile SDK**: 36
+- **Build Tools**: 36.0.0
+- **Gradle**: 9.4.1
+- **Android Gradle Plugin**: 9.1.0
+- **Kotlin**: 2.3.20
 - **Dependencies**: androidx.appcompat, androidx.preference, Kotlin stdlib
 
 ## Key Technical Details
