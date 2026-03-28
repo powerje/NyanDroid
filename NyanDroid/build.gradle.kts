@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-    kotlin("android")
 }
 
 // Added GitHub Actions CI workflow for automated builds and testing
@@ -13,13 +12,13 @@ allprojects {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
-        targetSdk = 35
+        targetSdk = 36
         minSdk = 30
-        versionCode = 18
+        versionCode = 19
         applicationId = "com.powerje.nyan"
-        versionName = "2.0.6"
+        versionName = "2.1.0"
     }
 
     buildTypes {
@@ -34,11 +33,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildToolsVersion = "35.0.0"
+    buildToolsVersion = "36.0.0"
 }
 
 dependencies {
-    implementation( "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation( "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.20")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.preference:preference:1.2.1")
 }
