@@ -16,7 +16,8 @@ class NyanAnimation(private val context: Context, private val holder: SurfaceHol
     }
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(context.getString(R.string.shared_preferences_name), 0)
 
-    private var hasCenteredImages: Boolean = false
+    private var lastCanvasWidth: Int = 0
+    private var lastCanvasHeight: Int = 0
     private var hasLoadedImages: Boolean = false
     private var preferencesChanged: Boolean = false
 
@@ -76,7 +77,8 @@ class NyanAnimation(private val context: Context, private val holder: SurfaceHol
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        hasCenteredImages = false
+        lastCanvasWidth = 0
+        lastCanvasHeight = 0
         preferencesChanged = true
     }
 
@@ -119,15 +121,17 @@ class NyanAnimation(private val context: Context, private val holder: SurfaceHol
         if (preferencesChanged) {
             setupAnimations()
             preferencesChanged = false
-            hasCenteredImages = false
+            lastCanvasWidth = 0
+            lastCanvasHeight = 0
         }
 
         frameCount++
         if (c != null && hasLoadedImages) {
-            if (!hasCenteredImages) {
+            if (c.width != lastCanvasWidth || c.height != lastCanvasHeight) {
                 rainbow!!.setCenter(c.width / 2, c.height / 2)
                 nyanDroid!!.setCenter(c.width / 2, c.height / 2)
-                hasCenteredImages = true
+                lastCanvasWidth = c.width
+                lastCanvasHeight = c.height
             }
 
             c.drawColor(ContextCompat.getColor(context, R.color.nyanblue))
